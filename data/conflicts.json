@@ -1,0 +1,23 @@
+[
+    {
+        "ingredient_1": "retinol",
+        "ingredient_2": "salicylic acid",
+        "severity": "high",
+        "reason": "Using retinol and salicylic acid together may increase skin irritation.",
+        "recommendation": "Avoid using these together in the same routine."
+    },
+    {
+        "ingredient_1": "retinol",
+        "ingredient_2": "vitamin c",
+        "severity": "medium",
+        "reason": "Combining strong active ingredients may increase irritation.",
+        "recommendation": "Consider using them at different times."
+    },
+    {
+        "ingredient_1": "retinol",
+        "ingredient_2": "benzoyl peroxide",
+        "severity": "high",
+        "reason": "Using both together can increase irritation and may affect retinoid effectiveness depending on the formulation.",
+        "recommendation": "Use them at different times unless the formulation is specifically designed for combined use."
+    }
+]
