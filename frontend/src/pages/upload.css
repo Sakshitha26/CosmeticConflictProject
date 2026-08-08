@@ -1,0 +1,156 @@
+/* ===========================
+   UPLOAD PAGE
+=========================== */
+
+.upload-container {
+    min-height: 100vh;
+    background: #f8f6f3;
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.upload-container h1 {
+    color: #5D4037;
+    font-size: 36px;
+    margin-bottom: 15px;
+}
+
+.upload-container p {
+    color: #555;
+    font-size: 18px;
+    margin-bottom: 40px;
+}
+
+/* ===========================
+   UPLOAD GRID
+=========================== */
+
+.upload-grid {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+/* ===========================
+   UPLOAD CARD
+=========================== */
+
+.upload-card {
+    width: 340px;
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.upload-card h2 {
+    color: #5D4037;
+    margin-bottom: 20px;
+}
+
+/* ===========================
+   FILE INPUT
+=========================== */
+
+.upload-card input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 2px dashed #5D4037;
+    border-radius: 10px;
+    background: #fafafa;
+    cursor: pointer;
+}
+
+/* ===========================
+   IMAGE PREVIEW
+=========================== */
+
+.preview-image {
+    width: 100%;
+    height: 260px;
+    object-fit: contain;
+    margin-top: 20px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background: #ffffff;
+}
+
+/* ===========================
+   ANALYZE BUTTON
+=========================== */
+
+.analyze-btn {
+    margin-top: 40px;
+    background: #5D4037;
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.analyze-btn:hover {
+    background: #3E2723;
+}
+
+.analyze-btn:disabled {
+    background: #999;
+    cursor: not-allowed;
+}
+
+/* ===========================
+   NOTE
+=========================== */
+
+.note {
+    margin-top: 25px;
+    color: #666;
+    font-size: 15px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+@media (max-width: 768px) {
+
+    .upload-container {
+        padding: 30px 15px;
+    }
+
+    .upload-container h1 {
+        font-size: 28px;
+    }
+
+    .upload-container p {
+        font-size: 16px;
+    }
+
+    .upload-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .upload-card {
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .preview-image {
+        height: 220px;
+    }
+
+    .analyze-btn {
+        width: 100%;
+        max-width: 350px;
+    }
+
+}

@@ -1,0 +1,142 @@
+/* ===========================
+   HOME PAGE
+=========================== */
+
+.home-container {
+    min-height: 100vh;
+    background: #f8f6f3;
+}
+
+/* ===========================
+   HERO SECTION
+=========================== */
+
+.hero-section {
+    text-align: center;
+    padding: 80px 20px;
+    background: linear-gradient(to right, #fef6f0, #f8f6f3);
+}
+
+.hero-section h1 {
+    font-size: 42px;
+    color: #5D4037;
+    margin-bottom: 20px;
+}
+
+.hero-section p {
+    max-width: 700px;
+    margin: auto;
+    font-size: 18px;
+    color: #555;
+    line-height: 1.8;
+}
+
+.start-btn {
+    margin-top: 35px;
+    background: #5D4037;
+    color: white;
+    border: none;
+    padding: 15px 35px;
+    font-size: 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.start-btn:hover {
+    background: #3E2723;
+}
+
+/* ===========================
+   ABOUT SECTION
+=========================== */
+
+.about-section {
+    padding: 70px 8%;
+}
+
+.about-section h2 {
+    text-align: center;
+    font-size: 34px;
+    color: #5D4037;
+    margin-bottom: 50px;
+}
+
+/* ===========================
+   STEP CARDS
+=========================== */
+
+.steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 30px;
+}
+
+.step-card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
+
+.step-card:hover {
+    transform: translateY(-5px);
+}
+
+.step-card h3 {
+    color: #5D4037;
+    margin-bottom: 15px;
+}
+
+.step-card p {
+    color: #555;
+    line-height: 1.7;
+}
+
+.step-card ul {
+    margin-top: 15px;
+    padding-left: 20px;
+}
+
+.step-card li {
+    margin-bottom: 8px;
+    color: #444;
+    font-weight: 500;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+@media (max-width:768px) {
+
+    .hero-section {
+        padding: 60px 20px;
+    }
+
+    .hero-section h1 {
+        font-size: 30px;
+    }
+
+    .hero-section p {
+        font-size: 16px;
+    }
+
+    .about-section {
+        padding: 50px 20px;
+    }
+
+    .about-section h2 {
+        font-size: 28px;
+    }
+
+    .steps {
+        grid-template-columns: 1fr;
+    }
+
+    .start-btn {
+        width: 100%;
+    }
+
+}
