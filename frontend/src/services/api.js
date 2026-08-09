@@ -1,9 +1,6 @@
 const API_URL = "http://127.0.0.1:5000";
 
-export async function analyzeProducts(
-  image1,
-  image2
-) {
+export async function analyzeProducts(image1, image2) {
   const formData = new FormData();
 
   formData.append("image1", image1);
