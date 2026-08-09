@@ -1,141 +1,336 @@
-from flask import Flask, render_template, request
+from flask import Flask, request, jsonify
 import os
+import traceback
+
 from engine.ingredient_matcher import match_ingredients
 from engine.ocr_engine import extract_text, extract_ingredients
 from engine.ingredient_cleaner import clean_ingredients
+from engine.conflict_engine import ConflictEngine
+
+
+# ==========================================
+# FLASK APP
+# ==========================================
 
 app = Flask(__name__)
 
-# Project directory
+
+# ==========================================
+# PROJECT DIRECTORY
+# ==========================================
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Upload folder
-UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "uploads")
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+# ==========================================
+# UPLOAD FOLDER
+# ==========================================
+
+UPLOAD_FOLDER = os.path.join(
+    BASE_DIR,
+    "static",
+    "uploads"
+)
+
+os.makedirs(
+    UPLOAD_FOLDER,
+    exist_ok=True
+)
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 
-@app.route("/")
+# ==========================================
+# CONFLICT ENGINE
+# ==========================================
+
+conflict_engine = ConflictEngine()
+
+
+# ==========================================
+# HOME / API HEALTH CHECK
+# ==========================================
+
+@app.route("/", methods=["GET"])
 def home():
-    return render_template("index.html")
+
+    return jsonify({
+        "project": "Cosmetic Conflict Analyzer",
+        "status": "Backend is running",
+        "message": "Backend API is ready for frontend integration"
+    })
 
 
-@app.route("/upload", methods=["POST"])
-def upload():
+# ==========================================
+# ANALYZE TWO PRODUCTS
+# ==========================================
 
-    if "image" not in request.files:
-        return "No image uploaded!"
-
-    image = request.files["image"]
-
-    if image.filename == "":
-        return "Please select an image."
-
-    # Save uploaded image
-    filename = "uploaded_image.jpg"
-    filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-
-    image.save(filepath)
+@app.route("/api/analyze", methods=["POST"])
+def analyze():
 
     try:
-        # Step 1: OCR
-        text = extract_text(filepath)
 
-        # Step 2: Extract Ingredients Section
-        ingredients_text = extract_ingredients(text)
+        # --------------------------------------
+        # CHECK PRODUCT 1
+        # --------------------------------------
 
-        # Step 3: Clean Ingredients
-        ingredients = clean_ingredients(ingredients_text)
-        matched_ingredients = match_ingredients(ingredients)
-        # Convert list to HTML
-        ingredient_list = ""
+        if "image1" not in request.files:
 
-        for ingredient in ingredients:
-            ingredient_list += f"<li>{ingredient}</li>"
+            return jsonify({
+                "success": False,
+                "error": "Product 1 image is missing"
+            }), 400
 
-        return f"""
-<!DOCTYPE html>
-<html>
 
-<head>
+        # --------------------------------------
+        # CHECK PRODUCT 2
+        # --------------------------------------
 
-<title>Cosmetic Conflict Analyzer</title>
+        if "image2" not in request.files:
 
-<style>
+            return jsonify({
+                "success": False,
+                "error": "Product 2 image is missing"
+            }), 400
 
-body {{
-    font-family: Arial;
-    background: #f5f5f5;
-    padding: 40px;
-}}
 
-.container {{
-    max-width: 900px;
-    margin: auto;
-    background: white;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
-}}
+        image1 = request.files["image1"]
+        image2 = request.files["image2"]
 
-h1 {{
-    text-align: center;
-}}
 
-ul {{
-    background: #eeeeee;
-    padding: 20px;
-    border-radius: 10px;
-}}
+        # --------------------------------------
+        # CHECK FILENAMES
+        # --------------------------------------
 
-li {{
-    margin-bottom: 8px;
-    font-size: 18px;
-}}
+        if image1.filename == "":
 
-a {{
-    text-decoration: none;
-    color: blue;
-    font-weight: bold;
-}}
+            return jsonify({
+                "success": False,
+                "error": "Product 1 image was not selected"
+            }), 400
 
-</style>
 
-</head>
+        if image2.filename == "":
 
-<body>
+            return jsonify({
+                "success": False,
+                "error": "Product 2 image was not selected"
+            }), 400
 
-<div class="container">
 
-<h1>🧴 Cosmetic Conflict Analyzer</h1>
+        # ======================================
+        # SAVE PRODUCT IMAGES
+        # ======================================
 
-<h2>Extracted Ingredients</h2>
+        filepath1 = os.path.join(
+            app.config["UPLOAD_FOLDER"],
+            "product1.jpg"
+        )
 
-<ul>
+        filepath2 = os.path.join(
+            app.config["UPLOAD_FOLDER"],
+            "product2.jpg"
+        )
 
-{ingredient_list}
 
-</ul>
+        image1.save(filepath1)
+        image2.save(filepath2)
 
-<br>
 
-<a href="/">⬅ Upload Another Image</a>
+        # ======================================
+        # PRODUCT 1 OCR
+        # ======================================
 
-</div>
+        print("\n==========================================")
+        print("PRODUCT 1")
+        print("==========================================")
 
-</body>
+        text1 = extract_text(filepath1)
 
-</html>
+        ingredients_text1 = extract_ingredients(text1)
 
-"""
+        ingredients1 = clean_ingredients(
+            ingredients_text1
+        )
+
+        matched_ingredients1 = match_ingredients(
+            ingredients1
+        )
+
+        print("Product 1 ingredients:")
+        print(ingredients1)
+
+        print("Product 1 matched ingredients:")
+        print(matched_ingredients1)
+
+
+        # ======================================
+        # PRODUCT 2 OCR
+        # ======================================
+
+        print("\n==========================================")
+        print("PRODUCT 2")
+        print("==========================================")
+
+        text2 = extract_text(filepath2)
+
+        ingredients_text2 = extract_ingredients(text2)
+
+        ingredients2 = clean_ingredients(
+            ingredients_text2
+        )
+
+        matched_ingredients2 = match_ingredients(
+            ingredients2
+        )
+
+        print("Product 2 ingredients:")
+        print(ingredients2)
+
+        print("Product 2 matched ingredients:")
+        print(matched_ingredients2)
+
+
+        # ======================================
+        # COMPARE PRODUCTS
+        # ======================================
+
+        print("\n==========================================")
+        print("CONFLICT ANALYSIS")
+        print("==========================================")
+
+        conflicts = conflict_engine.compare_products(
+            ingredients1,
+            ingredients2
+        )
+
+        print("Conflicts:")
+        print(conflicts)
+
+
+        # ======================================
+        # OVERALL SEVERITY
+        # ======================================
+
+        overall_severity = (
+            conflict_engine.calculate_overall_severity(
+                conflicts
+            )
+        )
+
+        print("Overall severity:")
+        print(overall_severity)
+
+
+        # ======================================
+        # STATUS
+        # ======================================
+
+        try:
+
+            status = conflict_engine.get_status(
+                conflicts
+            )
+
+        except AttributeError:
+
+            if overall_severity == "high":
+
+                status = "WARNING"
+
+            elif overall_severity == "medium":
+
+                status = "CAUTION"
+
+            elif overall_severity == "low":
+
+                status = "LOW RISK"
+
+            else:
+
+                status = "SAFE"
+
+
+        # ======================================
+        # RETURN JSON TO FRONTEND
+        # ======================================
+
+        return jsonify({
+
+            "success": True,
+
+            "product1": {
+
+                "filename": image1.filename,
+
+                "ingredients": ingredients1,
+
+                "matched_ingredients": matched_ingredients1
+
+            },
+
+            "product2": {
+
+                "filename": image2.filename,
+
+                "ingredients": ingredients2,
+
+                "matched_ingredients": matched_ingredients2
+
+            },
+
+            "conflicts": conflicts,
+
+            "overall_severity": overall_severity,
+
+            "status": status
+
+        })
+
+
+    # ======================================
+    # ERROR HANDLING
+    # ======================================
 
     except Exception as e:
-        return f"""
-        <h2>OCR Error</h2>
-        <p>{e}</p>
-        """
 
+        print("\n==========================================")
+        print("ERROR")
+        print("==========================================")
+
+        traceback.print_exc()
+
+        return jsonify({
+
+            "success": False,
+
+            "error": str(e)
+
+        }), 500
+
+
+# ==========================================
+# RUN APPLICATION
+# ==========================================
 
 if __name__ == "__main__":
-    app.run(debug=True)
+
+    print("\n==========================================")
+    print("COSMETIC CONFLICT ANALYZER")
+    print("==========================================")
+
+    print("Conflict dataset loaded successfully.")
+
+    print("Backend running at:")
+    print("http://127.0.0.1:5000")
+
+    print("\nAPI endpoint:")
+    print("POST /api/analyze")
+
+    print("==========================================\n")
+
+    app.run(
+        debug=True,
+        host="127.0.0.1",
+        port=5000
+    )
