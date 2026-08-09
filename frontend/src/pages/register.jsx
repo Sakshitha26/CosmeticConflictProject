@@ -1,136 +1,165 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import "./register.css";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./Register.css";
 
 function Register() {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: ""
+  });
 
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
 
-    const handleRegister = (e) => {
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value
+    });
 
-        e.preventDefault();
+    setError("");
+  };
 
-        if (
-            name.trim() === "" ||
-            email.trim() === "" ||
-            password.trim() === "" ||
-            confirmPassword.trim() === ""
-        ) {
-            alert("Please fill all fields.");
-            return;
-        }
-
-        if (password !== confirmPassword) {
-            alert("Passwords do not match.");
-            return;
-        }
-
-        // Temporary Registration
-        // Replace with Flask API later
-
-        alert("Registration Successful!");
-
-        navigate("/");
-    };
-
+  const validatePassword = (password) => {
     return (
+      password.length >= 8 &&
+      /[A-Z]/.test(password) &&
+      /[a-z]/.test(password) &&
+      /[0-9]/.test(password) &&
+      /[!@#$%^&*]/.test(password)
+    );
+  };
 
-        <div className="register-container">
+  const handleRegister = (e) => {
+    e.preventDefault();
 
-            <div className="register-card">
+    if (!form.name.trim()) {
+      setError("Please enter your name.");
+      return;
+    }
 
-                <h1>🧴 Cosmetic Conflict Analyzer</h1>
+    if (!form.email.includes("@")) {
+      setError("Please enter a valid email.");
+      return;
+    }
 
-                <h2>Create Account</h2>
+    if (!validatePassword(form.password)) {
+      setError(
+        "Password must contain 8 characters, uppercase, lowercase, number and special character."
+      );
+      return;
+    }
 
-                <form onSubmit={handleRegister}>
+    if (form.password !== form.confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
 
-                    <div className="input-group">
+    const users = JSON.parse(localStorage.getItem("users")) || [];
 
-                        <label>Full Name</label>
-
-                        <input
-                            type="text"
-                            placeholder="Enter your full name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            required
-                        />
-
-                    </div>
-
-                    <div className="input-group">
-
-                        <label>Email</label>
-
-                        <input
-                            type="email"
-                            placeholder="Enter your email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-
-                    </div>
-
-                    <div className="input-group">
-
-                        <label>Password</label>
-
-                        <input
-                            type="password"
-                            placeholder="Create password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-
-                    </div>
-
-                    <div className="input-group">
-
-                        <label>Confirm Password</label>
-
-                        <input
-                            type="password"
-                            placeholder="Confirm password"
-                            value={confirmPassword}
-                            onChange={(e) =>
-                                setConfirmPassword(e.target.value)
-                            }
-                            required
-                        />
-
-                    </div>
-
-                    <button
-                        type="submit"
-                        className="register-btn"
-                    >
-                        Register
-                    </button>
-
-                </form>
-
-                <p className="login-text">
-
-                    Already have an account?
-
-                    <Link to="/"> Login</Link>
-
-                </p>
-
-            </div>
-
-        </div>
-
+    const existingUser = users.find(
+      (user) => user.email === form.email
     );
 
+    if (existingUser) {
+      setError("User already registered. Please login.");
+      return;
+    }
+
+    users.push({
+      name: form.name,
+      email: form.email,
+      password: form.password
+    });
+
+    localStorage.setItem("users", JSON.stringify(users));
+
+    alert("Registration successful! Please login.");
+
+    navigate("/login");
+  };
+
+  return (
+    <div className="register-page">
+
+      <div className="register-card">
+
+        <div className="register-logo">✦</div>
+
+        <h1>Create Account</h1>
+
+        <p className="register-subtitle">
+          Create your CosmeticConflict account
+        </p>
+
+        <form onSubmit={handleRegister}>
+
+          <label>Name</label>
+          <input
+            type="text"
+            name="name"
+            placeholder="Enter your name"
+            value={form.name}
+            onChange={handleChange}
+          />
+
+          <label>Email</label>
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter your email"
+            value={form.email}
+            onChange={handleChange}
+          />
+
+          <label>Password</label>
+          <input
+            type="password"
+            name="password"
+            placeholder="Create a password"
+            value={form.password}
+            onChange={handleChange}
+          />
+
+          <small className="password-info">
+            8+ characters, uppercase, lowercase, number & special character
+          </small>
+
+          <label>Confirm Password</label>
+          <input
+            type="password"
+            name="confirmPassword"
+            placeholder="Confirm password"
+            value={form.confirmPassword}
+            onChange={handleChange}
+          />
+
+          {error && (
+            <p className="form-error">
+              {error}
+            </p>
+          )}
+
+          <button className="register-submit">
+            Register
+          </button>
+
+        </form>
+
+        <p className="switch-text">
+          Already have an account?
+          <button onClick={() => navigate("/login")}>
+            Login
+          </button>
+        </p>
+
+      </div>
+
+    </div>
+  );
 }
 
 export default Register;

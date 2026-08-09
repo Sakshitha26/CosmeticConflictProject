@@ -1,34 +1,60 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import React from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-import Login from "./pages/login";
-import Register from "./pages/register";
-import Home from "./pages/home";
-import Upload from "./pages/upload";
-import Result from "./pages/result";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import Analyze from "./pages/Analyze";
+import Results from "./pages/Results";
+import History from "./pages/History";
+import Profile from "./pages/Profile";
+
+import DashboardLayout from "./components/DashboardLayout";
+
+import "./App.css";
+
+function ProtectedRoute({ children }) {
+  const user = localStorage.getItem("currentUser");
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
+}
 
 function App() {
   return (
-    <Routes>
+    <BrowserRouter>
+      <Routes>
 
-      {/* Login Page */}
-      <Route path="/" element={<Login />} />
+        {/* PUBLIC PAGES */}
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
-      {/* Register Page */}
-      <Route path="/register" element={<Register />} />
+        {/* PROTECTED DASHBOARD */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<Dashboard />} />
+          <Route path="analyze" element={<Analyze />} />
+          <Route path="results" element={<Results />} />
+          <Route path="history" element={<History />} />
+          <Route path="profile" element={<Profile />} />
+        </Route>
 
-      {/* Home Page */}
-      <Route path="/home" element={<Home />} />
+        {/* FALLBACK */}
+        <Route path="*" element={<Navigate to="/" replace />} />
 
-      {/* Upload Page */}
-      <Route path="/upload" element={<Upload />} />
-
-      {/* Result Page */}
-      <Route path="/result" element={<Result />} />
-
-      {/* Invalid Route */}
-      <Route path="*" element={<Navigate to="/" replace />} />
-
-    </Routes>
+      </Routes>
+    </BrowserRouter>
   );
 }
 

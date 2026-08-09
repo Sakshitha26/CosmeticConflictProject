@@ -1,0 +1,143 @@
+.dashboard-layout {
+  min-height: 100vh;
+  display: flex;
+  background: #faf7f8;
+}
+
+.sidebar {
+  width: 250px;
+  min-height: 100vh;
+  background: #3f2933;
+  padding: 25px 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  padding: 8px;
+  margin-bottom: 40px;
+}
+
+.sidebar-symbol {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: #a85d78;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.side-link {
+  padding: 14px 16px;
+  border-radius: 10px;
+  color: #dfcbd3;
+  transition: 0.2s;
+}
+
+.side-link:hover {
+  background: #513541;
+  color: white;
+}
+
+.side-link.active {
+  background: #8e4c64;
+  color: white;
+}
+
+.logout-button {
+  margin-top: auto;
+  padding: 13px;
+  border: 1px solid #795565;
+  border-radius: 10px;
+  background: transparent;
+  color: white;
+}
+
+.dashboard-main {
+  flex: 1;
+}
+
+.dashboard-header {
+  height: 80px;
+  padding: 0 35px;
+  background: white;
+  border-bottom: 1px solid #eee0e5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dashboard-header h2 {
+  color: #4b2d38;
+  font-size: 20px;
+}
+
+.dashboard-header span {
+  color: #89777f;
+  font-size: 13px;
+}
+
+.header-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-user small {
+  display: block;
+  color: #8a7a80;
+}
+
+.user-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #ead6df;
+  color: #704055;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+}
+
+.dashboard-content {
+  padding: 35px;
+}
+
+@media (max-width: 700px) {
+  .sidebar {
+    width: 70px;
+    padding: 15px 8px;
+  }
+
+  .sidebar-logo span,
+  .side-link,
+  .logout-button {
+    font-size: 0;
+  }
+
+  .side-link {
+    text-align: center;
+  }
+
+  .dashboard-header {
+    padding: 0 15px;
+  }
+
+  .dashboard-content {
+    padding: 20px;
+  }
+}

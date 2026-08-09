@@ -1,139 +1,29 @@
-/* ===========================
-   GLOBAL RESET
-=========================== */
-
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-html,
-body,
-#root {
-    width: 100%;
-    min-height: 100vh;
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: #f8f6f3;
-    color: #333;
+html {
+  scroll-behavior: smooth;
 }
 
-/* ===========================
-   LINKS
-=========================== */
-
-a {
-    text-decoration: none;
-    color: inherit;
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #faf7f8;
+  color: #2d2529;
 }
 
-/* ===========================
-   BUTTONS
-=========================== */
+button,
+input {
+  font-family: inherit;
+}
 
 button {
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.3s ease;
+  cursor: pointer;
 }
 
-/* ===========================
-   INPUTS
-=========================== */
-
-input,
-textarea,
-select {
-    font-family: inherit;
-    outline: none;
-}
-
-/* ===========================
-   IMAGES
-=========================== */
-
-img {
-    max-width: 100%;
-    display: block;
-}
-
-/* ===========================
-   LISTS
-=========================== */
-
-ul,
-ol {
-    list-style: none;
-}
-
-/* ===========================
-   COMMON CONTAINER
-=========================== */
-
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: auto;
-}
-
-/* ===========================
-   FLEX UTILITIES
-=========================== */
-
-.flex {
-    display: flex;
-}
-
-.flex-center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.text-center {
-    text-align: center;
-}
-
-/* ===========================
-   COMMON BUTTON
-=========================== */
-
-.btn {
-    background-color: #5D4037;
-    color: white;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-}
-
-.btn:hover {
-    background-color: #3E2723;
-}
-
-/* ===========================
-   COMMON CARD
-=========================== */
-
-.card {
-    background: white;
-    border-radius: 12px;
-    padding: 25px;
-    box-shadow: 0 5px 12px rgba(0,0,0,0.1);
-}
-
-/* ===========================
-   RESPONSIVE
-=========================== */
-
-@media (max-width:768px) {
-
-    .container {
-        width: 95%;
-    }
-
-    .btn {
-        width: 100%;
-    }
-
+a {
+  text-decoration: none;
+  color: inherit;
 }

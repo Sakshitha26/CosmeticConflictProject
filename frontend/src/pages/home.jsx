@@ -1,104 +1,142 @@
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/navbar";
-import Footer from "../components/footer";
-import "./home.css";
+import "./Home.css";
 
 function Home() {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  return (
+    <div className="home-page">
 
-    return (
-        <>
+      <nav className="home-navbar">
 
-            <Navbar />
+        <div className="home-logo">
+          <div className="logo-symbol">✦</div>
+          <span>CosmeticConflict</span>
+        </div>
 
-            <div className="home-container">
+        <div className="home-nav-buttons">
+          <button
+            className="nav-login"
+            onClick={() => navigate("/login")}
+          >
+            Login
+          </button>
 
-                <div className="hero-section">
+          <button
+            className="nav-register"
+            onClick={() => navigate("/register")}
+          >
+            Register
+          </button>
+        </div>
 
-                    <h1>🧴 Cosmetic Conflict Analyzer</h1>
+      </nav>
 
-                    <p>
-                        Check whether two cosmetic products are safe to use
-                        together by uploading their ingredient label images.
-                    </p>
+      <section className="hero-section">
 
-                    <button
-                        className="start-btn"
-                        onClick={() => navigate("/upload")}
-                    >
-                        Start Analysis
-                    </button>
+        <div className="hero-content">
 
-                </div>
+          <p className="hero-small-title">
+            SMART COSMETIC ANALYSIS
+          </p>
 
-                <div className="about-section">
+          <h1>
+            Know What Your
+            <span> Cosmetics </span>
+            Contain
+          </h1>
 
-                    <h2>How It Works</h2>
+          <p className="hero-description">
+            Analyze cosmetic ingredients, detect ingredient conflicts,
+            and understand whether a product is Safe, Medium Risk,
+            or Harmful.
+          </p>
 
-                    <div className="steps">
+          <div className="hero-buttons">
 
-                        <div className="step-card">
+            <button
+              className="hero-primary"
+              onClick={() => navigate("/register")}
+            >
+              Get Started →
+            </button>
 
-                            <h3>1️⃣ Login</h3>
+            <button
+              className="hero-secondary"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </button>
 
-                            <p>
-                                Login or register to access the Cosmetic
-                                Conflict Analyzer.
-                            </p>
+          </div>
 
-                        </div>
+        </div>
 
-                        <div className="step-card">
+        <div className="hero-image-area">
 
-                            <h3>2️⃣ Upload Images</h3>
+          <div className="cosmetic-card card-one">
+            <span>🧴</span>
+          </div>
 
-                            <p>
-                                Upload ingredient label images of two cosmetic
-                                products.
-                            </p>
+          <div className="cosmetic-card card-two">
+            <span>🧪</span>
+          </div>
 
-                        </div>
+          <div className="cosmetic-card card-three">
+            <span>🌸</span>
+          </div>
 
-                        <div className="step-card">
+          <div className="hero-circle"></div>
 
-                            <h3>3️⃣ AI Analysis</h3>
+        </div>
 
-                            <p>
-                                The backend extracts ingredients using OCR,
-                                cleans the ingredient names, and checks them
-                                against the conflict dataset.
-                            </p>
+      </section>
 
-                        </div>
+      <section className="features-section">
 
-                        <div className="step-card">
+        <h2>How CosmeticConflict Works</h2>
 
-                            <h3>4️⃣ View Result</h3>
+        <div className="features-grid">
 
-                            <p>
-                                You will only see the overall compatibility
-                                result:
-                            </p>
+          <div className="feature-card">
+            <div className="feature-icon">📷</div>
+            <h3>Upload</h3>
+            <p>
+              Upload ingredient images of cosmetic products.
+            </p>
+          </div>
 
-                            <ul>
-                                <li>🔴 High Risk</li>
-                                <li>🟡 Medium Risk</li>
-                                <li>🟢 Safe</li>
-                            </ul>
+          <div className="feature-card">
+            <div className="feature-icon">🔍</div>
+            <h3>Analyze</h3>
+            <p>
+              OCR extracts the ingredients from your images.
+            </p>
+          </div>
 
-                        </div>
+          <div className="feature-card">
+            <div className="feature-icon">⚠️</div>
+            <h3>Detect Conflicts</h3>
+            <p>
+              The system identifies potentially conflicting ingredients.
+            </p>
+          </div>
 
-                    </div>
+          <div className="feature-card">
+            <div className="feature-icon">🛡️</div>
+            <h3>Safety Prediction</h3>
+            <p>
+              Get a prediction: Safe, Medium Risk, or Harmful.
+            </p>
+          </div>
 
-                </div>
+        </div>
 
-            </div>
+      </section>
 
-            <Footer />
-
-        </>
-    );
+    </div>
+  );
 }
 
 export default Home;
