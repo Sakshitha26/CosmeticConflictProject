@@ -1,0 +1,301 @@
+Ingredient_1,Ingredient_2,Co_Occurrence_Count,Severity,Severity_Note,A_exfoliant,A_retinoid,A_antioxidant,A_drying_agent,A_humectant,A_emollient,A_preservative,A_fragrance,A_active_ingredient,B_exfoliant,B_retinoid,B_antioxidant,B_drying_agent,B_humectant,B_emollient,B_preservative,B_fragrance,B_active_ingredient,sum_exfoliant,difference_exfoliant,sum_retinoid,difference_retinoid,sum_antioxidant,difference_antioxidant,sum_drying_agent,difference_drying_agent,sum_humectant,difference_humectant,sum_emollient,difference_emollient,sum_preservative,difference_preservative,sum_fragrance,difference_fragrance,sum_active_ingredient,difference_active_ingredient,co_occurrence,target
+Xanthan Gum,Niacinamide,58,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,58,Safe
+Helianthus Annuus (Sunflower) Seed Oil,Tetrahexyldecyl Ascorbate,11,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,11,Safe
+Betaine,Hydrogenated Lecithin,12,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,Safe
+Sucrose,Polymethylsilsesquioxane,14,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,14,Safe
+Glycerin,Linalool,213,Safe,No documented dermatological interaction between these two,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0,213,Safe
+Allantoin,Glycolic Acid,22,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,22,Safe
+Phenoxyethanol,Sodium Hyaluronate,372,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,372,Safe
+Geraniol,Cholesterol,11,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,11,Safe
+Hydrogenated Lecithin,Adenosine,16,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,Safe
+Mica,Sucrose,15,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,Safe
+Phenoxyethanol,Tromethamine,68,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,68,Safe
+Betaine,Dipotassium Glycyrrhizate,27,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,27,Safe
+Limonene,Aloe Barbadensis Leaf Juice,20,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,20,Safe
+Hydrogenated Lecithin,Polymethylsilsesquioxane,12,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,Safe
+Carbomer,Dipropylene Glycol,41,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,41,Safe
+Propanediol,Polysorbate 60,19,Safe,No documented dermatological interaction between these two,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,19,Safe
+2-Hexanediol,Dipotassium Glycyrrhizate,29,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,29,Safe
+Ethylhexylglycerin,Polymethylsilsesquioxane,43,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,43,Safe
+Disodium EDTA,Chlorphenesin,41,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,41,Safe
+Butylene Glycol,Sodium Benzoate,179,Safe,No documented dermatological interaction between these two,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,179,Safe
+Disodium EDTA,Squalane,71,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,71,Safe
+Disodium EDTA,Peg-100 Stearate,63,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,63,Safe
+Disodium EDTA,Cetearyl Alcohol,70,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,70,Safe
+Caprylic/Capric Triglyceride,Glyceryl Stearate,103,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,103,Safe
+Phenoxyethanol,Citronellol,99,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,99,Safe
+Caffeine,Allantoin,6,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,Safe
+Limonene,Lactic Acid,28,Medium Risk,Fragrance allergen on acid-exfoliated skin — possible increased sensitivity,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,28,Medium Risk
+Allantoin,Cholesterol,2,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,Safe
+Tocopherol,Sodium Benzoate,97,Safe,No documented dermatological interaction between these two,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,0,97,Safe
+Sodium Citrate,Alcohol Denat,9,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,Safe
+Sodium Benzoate,Sodium Chloride,33,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,33,Safe
+Trehalose,Cholesterol,34,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,34,Safe
+Dimethicone,Trehalose,89,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,89,Safe
+Dimethicone,Tetrahexyldecyl Ascorbate,48,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,48,Safe
+Water,Polysorbate 60,86,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,86,Safe
+Water,Disodium EDTA,214,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,214,Safe
+Linalool,Isohexadecane,24,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,24,Safe
+Niacinamide,Titanium Dioxide (Ci 77891),7,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,Safe
+Sodium Benzoate,Dipropylene Glycol,22,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,22,Safe
+Linalool,Behenyl Alcohol,30,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,30,Safe
+Geraniol,Bht,18,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,18,Safe
+Water,Cetyl Alcohol,123,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,123,Safe
+Dimethicone,Disodium EDTA,117,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,117,Safe
+Dimethicone,Titanium Dioxide (Ci 77891),47,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,47,Safe
+Water,Peg-100 Stearate,63,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,63,Safe
+Caffeine,Stearic Acid,30,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,Safe
+Ethylhexylglycerin,Alcohol Denat,25,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,25,Safe
+Propanediol,Polymethylsilsesquioxane,24,Safe,No documented dermatological interaction between these two,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,24,Safe
+Phenoxyethanol,Sodium Benzoate,220,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,220,Safe
+Dimethicone,Helianthus Annuus (Sunflower) Seed Oil,35,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,35,Safe
+Limonene,Cholesterol,16,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,16,Safe
+Niacinamide,Sucrose,3,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,Safe
+Tocopheryl Acetate,Panthenol,62,Safe,No documented dermatological interaction between these two,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0,0,0,0,62,Safe
+Linalool,Caffeine,61,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,61,Safe
+Fragrance,Aloe Barbadensis Leaf Juice,18,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,18,Safe
+Propanediol,Alcohol Denat,21,Safe,No documented dermatological interaction between these two,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,21,Safe
+Xanthan Gum,Potassium Hydroxide,25,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,25,Safe
+Xanthan Gum,Limonene,79,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,79,Safe
+Cetearyl Alcohol,Tetrahexyldecyl Ascorbate,22,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,22,Safe
+Cucumis Sativus (Cucumber) Fruit Extract,Behenyl Alcohol,12,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,Safe
+Silica,Lactic Acid,20,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,20,Safe
+Helianthus Annuus (Sunflower) Seed Oil,Sucrose,8,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,Safe
+Stearic Acid,Peg-100 Stearate,29,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,29,Safe
+Tocopherol,2-Hexanediol,38,Safe,No documented dermatological interaction between these two,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,38,Safe
+Dipotassium Glycyrrhizate,Sucrose,22,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,22,Safe
+Glyceryl Stearate,Sucrose,19,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,19,Safe
+Sodium Benzoate,Behenyl Alcohol,19,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,19,Safe
+Citric Acid,Kaolin,22,Safe,No documented dermatological interaction between these two,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,22,Safe
+Squalane,Tetrahexyldecyl Ascorbate,35,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,35,Safe
+Lecithin,Isohexadecane,17,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,Safe
+Tocopheryl Acetate,Alcohol,49,Safe,No documented dermatological interaction between these two,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,49,Safe
+Hexylene Glycol,Glycolic Acid,14,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,14,Safe
+Stearic Acid,Glycolic Acid,9,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,Safe
+Caprylic/Capric Triglyceride,Chlorphenesin,50,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,50,Safe
+Lecithin,Cholesterol,36,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,36,Safe
+Tromethamine,Kaolin,3,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,Safe
+Sodium Citrate,Dipotassium Glycyrrhizate,17,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,Safe
+Chlorphenesin,Geraniol,15,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,15,Safe
+Disodium EDTA,Polysorbate 20,49,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,49,Safe
+Limonene,Cetearyl Alcohol,40,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,40,Safe
+Alcohol Denat,Behenyl Alcohol,4,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,Safe
+Citric Acid,Bht,42,Safe,No documented dermatological interaction between these two,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,42,Safe
+Stearic Acid,Dipotassium Glycyrrhizate,8,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,Safe
+Alcohol,Betaine,27,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,27,Safe
+Sodium Hydroxide,Hydrogenated Lecithin,23,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,23,Safe
+Potassium Sorbate,Isohexadecane,26,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,26,Safe
+Tocopherol,Citral,36,Safe,No documented dermatological interaction between these two,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,36,Safe
+Caprylic/Capric Triglyceride,Camellia Sinensis Leaf Extract,56,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,56,Safe
+Cyclopentasiloxane,Alcohol,39,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,39,Safe
+Dipropylene Glycol,Polysilicone-11,9,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,Safe
+Potassium Sorbate,Panthenol,44,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,44,Safe
+Glycerin,Behenyl Alcohol,84,Safe,No documented dermatological interaction between these two,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,84,Safe
+Potassium Sorbate,Cetearyl Alcohol,48,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,48,Safe
+Sodium Chloride,Sorbitol,11,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,11,Safe
+Cyclopentasiloxane,Citral,8,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,Safe
+Disodium EDTA,Cucumis Sativus (Cucumber) Fruit Extract,20,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,20,Safe
+2-Hexanediol,Sodium Citrate,24,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,24,Safe
+Panthenol,Polysilicone-11,3,Safe,No documented dermatological interaction between these two,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,3,Safe
+Helianthus Annuus (Sunflower) Seed Oil,Kaolin,10,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,Safe
+Stearic Acid,Bht,16,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,16,Safe
+Dipropylene Glycol,Niacinamide,13,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,13,Safe
+Disodium EDTA,Citronellol,45,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45,Safe
+Cetearyl Alcohol,Cetyl Alcohol,37,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,37,Safe
+Silica,Isohexadecane,21,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,21,Safe
+Lactic Acid,Tromethamine,3,Safe,No documented dermatological interaction between these two,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,Safe
+Cetyl Alcohol,Cucumis Sativus (Cucumber) Fruit Extract,17,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,Safe
+Cetearyl Alcohol,Polysilicone-11,12,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,Safe
+Xanthan Gum,Propylene Glycol,27,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,27,Safe
+Sodium Hydroxide,Geraniol,29,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,29,Safe
+Disodium EDTA,Niacinamide,23,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,23,Safe
+Water,Titanium Dioxide (Ci 77891),69,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,69,Safe
+Mica,Polysilicone-11,21,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,21,Safe
+Citronellol,Adenosine,18,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,18,Safe
+Disodium EDTA,Glycolic Acid,12,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,Safe
+Disodium EDTA,Lecithin,66,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,66,Safe
+Cetearyl Alcohol,Acrylates/C10-30 Alkyl Acrylate Crosspolymer,38,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,38,Safe
+Pentylene Glycol,Potassium Hydroxide,14,Safe,No documented dermatological interaction between these two,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,14,Safe
+Linalool,Tetrahexyldecyl Ascorbate,24,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,24,Safe
+Carbomer,Hydrogenated Lecithin,43,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,43,Safe
+Fragrance,Propylene Glycol,28,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0,28,Safe
+Hexylene Glycol,Algae Extract,33,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,33,Safe
+Water,Behenyl Alcohol,68,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,68,Safe
+Chlorphenesin,Propylene Glycol,16,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,16,Safe
+Limonene,Niacinamide,12,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,12,Safe
+Carbomer,Propanediol,56,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,56,Safe
+Stearic Acid,Trehalose,28,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,28,Safe
+Linalool,Polysilicone-11,23,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,23,Safe
+Camellia Sinensis Leaf Extract,Dipropylene Glycol,18,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,18,Safe
+Hexylene Glycol,Alcohol Denat,10,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,Safe
+Caffeine,Dipropylene Glycol,9,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,Safe
+Fragrance,Cucumis Sativus (Cucumber) Fruit Extract,19,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,19,Safe
+Citric Acid,Sodium Hydroxide,99,Safe,No documented dermatological interaction between these two,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,99,Safe
+Lactic Acid,Adenosine,10,Safe,No documented dermatological interaction between these two,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,Safe
+Caprylic/Capric Triglyceride,Geraniol,42,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,42,Safe
+Propanediol,Peg-100 Stearate,10,Safe,No documented dermatological interaction between these two,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,10,Safe
+Citral,Titanium Dioxide (Ci 77891),6,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,Safe
+Tocopheryl Acetate,Hydrogenated Lecithin,42,Safe,No documented dermatological interaction between these two,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,42,Safe
+Citric Acid,Disodium EDTA,82,Safe,No documented dermatological interaction between these two,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,82,Safe
+Glycerin,Algae Extract,98,Safe,No documented dermatological interaction between these two,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,98,Safe
+Sodium Benzoate,Allantoin,35,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,35,Safe
+Mica,Sorbitol,13,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,13,Safe
+Disodium EDTA,Tromethamine,37,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,37,Safe
+Sodium Hyaluronate,Citral,36,Safe,No documented dermatological interaction between these two,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,36,Safe
+Trehalose,Niacinamide,12,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,Safe
+Sodium Citrate,Sorbitol,15,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,15,Safe
+Citronellol,Peg-100 Stearate,16,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,Safe
+Cyclopentasiloxane,Chlorphenesin,27,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,27,Safe
+Silica,Propylene Glycol,15,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,15,Safe
+Caprylyl Glycol,Sodium Benzoate,98,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,98,Safe
+Glyceryl Stearate,Cyclopentasiloxane,42,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,42,Safe
+Bht,Cholesterol,16,Safe,No documented dermatological interaction between these two,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,16,Safe
+Alcohol,Cholesterol,6,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,Safe
+Citronellol,Alcohol Denat,31,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,31,Safe
+Cetyl Alcohol,Geraniol,21,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,21,Safe
+Glyceryl Stearate,Cetyl Alcohol,86,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,86,Safe
+Glycerin,Disodium EDTA,235,Safe,No documented dermatological interaction between these two,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,235,Safe
+Citronellol,Polymethylsilsesquioxane,18,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,18,Safe
+Disodium EDTA,Sodium Chloride,36,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,36,Safe
+Cholesterol,Isohexadecane,17,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,Safe
+Ethylhexylglycerin,Alcohol,69,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,69,Safe
+Alcohol Denat,Citral,16,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,Safe
+Stearic Acid,Mica,25,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,25,Safe
+Sodium Hyaluronate,Carbomer,169,Safe,No documented dermatological interaction between these two,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,169,Safe
+Betaine,Polysorbate 60,13,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,13,Safe
+Glyceryl Stearate,Cetearyl Alcohol,106,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,106,Safe
+Lecithin,Behenyl Alcohol,25,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,25,Safe
+Linalool,Hexylene Glycol,50,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,50,Safe
+Polysorbate 20,Lecithin,54,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,54,Safe
+Mica,Tetrahexyldecyl Ascorbate,18,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,18,Safe
+Trehalose,Polymethylsilsesquioxane,15,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,Safe
+Cucumis Sativus (Cucumber) Fruit Extract,Citral,9,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,Safe
+Citric Acid,Tetrahexyldecyl Ascorbate,27,Safe,No documented dermatological interaction between these two,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,27,Safe
+Disodium EDTA,Panthenol,25,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,25,Safe
+Propanediol,Niacinamide,38,Safe,No documented dermatological interaction between these two,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,38,Safe
+Potassium Sorbate,Behenyl Alcohol,21,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,21,Safe
+Adenosine,Bht,13,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,13,Safe
+Dimethicone,Disodium EDTA,144,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,144,Safe
+Caprylyl Glycol,Cholesterol,52,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,52,Safe
+Xanthan Gum,Trehalose,42,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,42,Safe
+Pentylene Glycol,Stearic Acid,34,Safe,No documented dermatological interaction between these two,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,34,Safe
+Sodium Benzoate,Sodium Citrate,50,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,50,Safe
+Water,Chlorphenesin,141,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,141,Safe
+Xanthan Gum,2-Hexanediol,81,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,81,Safe
+Chlorphenesin,Aloe Barbadensis Leaf Juice,10,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,10,Safe
+Carbomer,Silica,74,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,74,Safe
+Trehalose,Tetrahexyldecyl Ascorbate,24,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,24,Safe
+Tocopherol,Alcohol Denat,25,Safe,No documented dermatological interaction between these two,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,25,Safe
+Cetearyl Alcohol,2-Hexanediol,24,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,24,Safe
+Phenoxyethanol,Polymethylsilsesquioxane,69,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,69,Safe
+Dipotassium Glycyrrhizate,Tetrahexyldecyl Ascorbate,11,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,11,Safe
+Alcohol Denat,Sorbitol,11,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,11,Safe
+Limonene,Citral,84,Medium Risk,Both are EU-listed fragrance allergens — cumulative sensitization risk for reactive skin,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,84,Medium Risk
+Potassium Sorbate,Cucumis Sativus (Cucumber) Fruit Extract,33,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,33,Safe
+Dimethicone,Panthenol,58,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,58,Safe
+Ethylhexylglycerin,Fragrance,124,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,124,Safe
+Geraniol,Sodium Chloride,8,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,8,Safe
+Ethylhexylglycerin,Silica,82,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,82,Safe
+Dipropylene Glycol,Hydrogenated Lecithin,15,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,Safe
+Alcohol Denat,Sucrose,12,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,Safe
+Disodium EDTA,Sorbitol,42,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,42,Safe
+Xanthan Gum,Glycolic Acid,37,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,37,Safe
+Sodium Hyaluronate,Isohexadecane,47,Safe,No documented dermatological interaction between these two,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,47,Safe
+Cetearyl Alcohol,Dipotassium Glycyrrhizate,16,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,Safe
+Hydrogenated Lecithin,Isohexadecane,15,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,Safe
+Caprylic/Capric Triglyceride,Sodium Citrate,31,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,31,Safe
+Potassium Sorbate,2-Hexanediol,49,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,49,Safe
+2-Hexanediol,Glycolic Acid,7,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,Safe
+Cetearyl Alcohol,Kaolin,21,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,21,Safe
+Behenyl Alcohol,Aloe Barbadensis Leaf Juice,4,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,Safe
+Dimethicone,Peg-100 Stearate,61,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,61,Safe
+Allantoin,Dipropylene Glycol,9,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,Safe
+Sodium Chloride,Peg-100 Stearate,1,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,Safe
+Phenoxyethanol,Sodium Hydroxide,230,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,230,Safe
+Disodium EDTA,Isohexadecane,17,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,Safe
+Cetearyl Alcohol,Citronellol,19,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,19,Safe
+Sodium Citrate,Cucumis Sativus (Cucumber) Fruit Extract,16,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,Safe
+Dipropylene Glycol,Titanium Dioxide (Ci 77891),7,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,Safe
+Polysorbate 20,Bht,15,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,15,Safe
+Trehalose,Kaolin,5,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,Safe
+Geraniol,Dipropylene Glycol,31,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,31,Safe
+Citric Acid,Tocopherol,128,Safe,No documented dermatological interaction between these two,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,128,Safe
+Sodium Hyaluronate,Niacinamide,52,Safe,No documented dermatological interaction between these two,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,52,Safe
+Tocopheryl Acetate,Behenyl Alcohol,50,Safe,No documented dermatological interaction between these two,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,50,Safe
+Citric Acid,Potassium Hydroxide,31,Safe,No documented dermatological interaction between these two,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,31,Safe
+Pentylene Glycol,Tetrahexyldecyl Ascorbate,18,Safe,No documented dermatological interaction between these two,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,18,Safe
+Cetearyl Alcohol,Helianthus Annuus (Sunflower) Seed Oil,24,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,24,Safe
+Disodium EDTA,Sucrose,57,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,57,Safe
+Caprylic/Capric Triglyceride,Polysilicone-11,34,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,34,Safe
+Squalane,Dipropylene Glycol,14,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,14,Safe
+Carbomer,Niacinamide,45,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45,Safe
+Dimethicone,Tromethamine,64,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,64,Safe
+Citronellol,Mica,22,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,22,Safe
+Citronellol,Tetrahexyldecyl Ascorbate,14,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,14,Safe
+Squalane,Hydrogenated Lecithin,31,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,31,Safe
+Cetyl Alcohol,Niacinamide,14,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,14,Safe
+Sodium Chloride,Citral,7,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,Safe
+Disodium EDTA,Sodium Hydroxide,65,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,65,Safe
+Fragrance,Camellia Sinensis Leaf Extract,49,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,49,Safe
+Citral,Polysilicone-11,2,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,Safe
+Dipropylene Glycol,Alcohol Denat,16,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,Safe
+Ethylhexylglycerin,Citronellol,29,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,29,Safe
+Linalool,Betaine,33,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,33,Safe
+Caffeine,Cucumis Sativus (Cucumber) Fruit Extract,44,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,44,Safe
+Linalool,Sodium Chloride,23,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,23,Safe
+Limonene,Camellia Sinensis Leaf Extract,30,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,30,Safe
+Glycerin,Dipotassium Glycyrrhizate,88,Safe,No documented dermatological interaction between these two,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,88,Safe
+2-Hexanediol,Alcohol,29,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,29,Safe
+Tocopherol,Squalane,72,Safe,No documented dermatological interaction between these two,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,72,Safe
+Caprylic/Capric Triglyceride,Polysorbate 20,58,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,58,Safe
+Fragrance,Geraniol,55,Medium Risk,Both are EU-listed fragrance allergens — cumulative sensitization risk for reactive skin,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,55,Medium Risk
+Propanediol,Titanium Dioxide (Ci 77891),22,Safe,No documented dermatological interaction between these two,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,22,Safe
+Linalool,Helianthus Annuus (Sunflower) Seed Oil,27,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,27,Safe
+Ethylhexylglycerin,Polysorbate 60,43,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,43,Safe
+Sodium Hyaluronate,Alcohol Denat,45,Safe,No documented dermatological interaction between these two,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,45,Safe
+Polysorbate 60,Bht,8,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,8,Safe
+Butylene Glycol,Sodium Citrate,115,Safe,No documented dermatological interaction between these two,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,115,Safe
+Disodium EDTA,Propanediol,52,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,52,Safe
+Algae Extract,Dipotassium Glycyrrhizate,7,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,Safe
+Butylene Glycol,Cyclopentasiloxane,124,Safe,No documented dermatological interaction between these two,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,124,Safe
+Dipropylene Glycol,Algae Extract,5,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,Safe
+Glyceryl Stearate,Acrylates/C10-30 Alkyl Acrylate Crosspolymer,50,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,50,Safe
+Fragrance,Squalane,51,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,51,Safe
+Caprylyl Glycol,Helianthus Annuus (Sunflower) Seed Oil,32,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,32,Safe
+Water,Linalool,216,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,216,Safe
+Xanthan Gum,Isohexadecane,33,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,33,Safe
+Hexylene Glycol,Cucumis Sativus (Cucumber) Fruit Extract,28,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,28,Safe
+Lactic Acid,Tetrahexyldecyl Ascorbate,6,Safe,No documented dermatological interaction between these two,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,Safe
+Fragrance,Lactic Acid,23,Medium Risk,Fragrance allergen on acid-exfoliated skin — possible increased sensitivity,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,23,Medium Risk
+Linalool,Algae Extract,16,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,16,Safe
+Caprylic/Capric Triglyceride,Betaine,31,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,31,Safe
+Trehalose,Isohexadecane,14,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,14,Safe
+Cetearyl Alcohol,Sorbitol,19,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,19,Safe
+Sodium Hydroxide,Caffeine,52,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,52,Safe
+Limonene,Cyclopentasiloxane,28,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,28,Safe
+Panthenol,Tetrahexyldecyl Ascorbate,14,Safe,No documented dermatological interaction between these two,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,14,Safe
+Water,Kaolin,75,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,75,Safe
+Phenoxyethanol,Dipotassium Glycyrrhizate,75,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,75,Safe
+Cetyl Alcohol,Sodium Citrate,15,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,Safe
+Mica,Bht,25,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,25,Safe
+Cucumis Sativus (Cucumber) Fruit Extract,Polysilicone-11,20,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,20,Safe
+Silica,Geraniol,31,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,31,Safe
+Silica,Dipropylene Glycol,30,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,Safe
+Dimethicone,Polysorbate 60,48,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,48,Safe
+Adenosine,Isohexadecane,9,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,Safe
+Sorbitol,Cucumis Sativus (Cucumber) Fruit Extract,16,Safe,No documented dermatological interaction between these two,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,16,Safe
+Citric Acid,Dipotassium Glycyrrhizate,34,Safe,No documented dermatological interaction between these two,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,34,Safe
+Peg-100 Stearate,Titanium Dioxide (Ci 77891),19,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,19,Safe
+Citronellol,Kaolin,6,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,Safe
+Glycerin,Tetrahexyldecyl Ascorbate,76,Safe,No documented dermatological interaction between these two,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,76,Safe
+Chlorphenesin,Polysilicone-11,8,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,8,Safe
+Potassium Sorbate,Lactic Acid,50,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,50,Safe
+Cucumis Sativus (Cucumber) Fruit Extract,Sucrose,21,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,21,Safe
+Sodium Hydroxide,Tromethamine,9,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,Safe
+Caprylyl Glycol,Betaine,50,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,50,Safe
+Xanthan Gum,Bht,36,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,36,Safe
+Adenosine,Behenyl Alcohol,10,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,Safe
+Adenosine,Sorbitol,6,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,6,Safe
+Cucumis Sativus (Cucumber) Fruit Extract,Titanium Dioxide (Ci 77891),17,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,Safe
+Ethylhexylglycerin,Potassium Sorbate,125,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,125,Safe
+Trehalose,Polysorbate 60,14,Safe,No documented dermatological interaction between these two,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,14,Safe
