@@ -408,3 +408,15 @@ class ConflictEngine:
         # ==========================================
 
         return "SAFE"
+
+
+    def analyze(self, ingredients):
+                    conflicts = self.check_conflicts(ingredients)
+
+                    return {
+                            "ingredients": ingredients,
+                            "conflict_count": len(conflicts),
+                            "conflicts": conflicts,
+                            "overall_severity": self.calculate_overall_severity(conflicts),
+                            "status": self.get_status(conflicts)
+                    }
