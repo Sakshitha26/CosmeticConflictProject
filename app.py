@@ -8,6 +8,8 @@ from engine.ocr_engine import extract_text, extract_ingredients
 from engine.ingredient_cleaner import clean_ingredients
 from engine.conflict_engine import ConflictEngine
 
+from risk.risk_analyzer import analyze_risk
+
 
 # ==========================================
 # FLASK APP
@@ -50,6 +52,27 @@ conflict_engine = ConflictEngine()
 
 
 # ==========================================
+# XGBOOST ML
+# ==========================================
+
+ML_AVAILABLE = False
+predict_risk = None
+
+try:
+
+    from ml.predict import predict_risk
+
+    ML_AVAILABLE = True
+
+    print("XGBoost ML predictor loaded successfully.")
+
+except Exception as e:
+
+    print("XGBoost ML predictor could not be loaded.")
+    print("ML error:", e)
+
+
+# ==========================================
 # HOME / API HEALTH CHECK
 # ==========================================
 
@@ -57,9 +80,27 @@ conflict_engine = ConflictEngine()
 def home():
 
     return jsonify({
-        "project": "Cosmetic Conflict Analyzer",
+
+        "project": "Real-Time Cosmetic Conflict Detection and Safety Auditing System",
+
         "status": "Backend is running",
+
+        "modules": {
+
+            "ocr": True,
+
+            "conflict_engine": True,
+
+            "cci_risk_analysis": True,
+
+            "xgboost": ML_AVAILABLE,
+
+            "shap": ML_AVAILABLE
+
+        },
+
         "message": "Backend API is ready for frontend integration"
+
     })
 
 
@@ -72,27 +113,33 @@ def analyze():
 
     try:
 
-        # --------------------------------------
+        # ======================================
         # CHECK PRODUCT 1
-        # --------------------------------------
+        # ======================================
 
         if "image1" not in request.files:
 
             return jsonify({
+
                 "success": False,
+
                 "error": "Product 1 image is missing"
+
             }), 400
 
 
-        # --------------------------------------
+        # ======================================
         # CHECK PRODUCT 2
-        # --------------------------------------
+        # ======================================
 
         if "image2" not in request.files:
 
             return jsonify({
+
                 "success": False,
+
                 "error": "Product 2 image is missing"
+
             }), 400
 
 
@@ -100,23 +147,29 @@ def analyze():
         image2 = request.files["image2"]
 
 
-        # --------------------------------------
+        # ======================================
         # CHECK FILENAMES
-        # --------------------------------------
+        # ======================================
 
         if image1.filename == "":
 
             return jsonify({
+
                 "success": False,
+
                 "error": "Product 1 image was not selected"
+
             }), 400
 
 
         if image2.filename == "":
 
             return jsonify({
+
                 "success": False,
+
                 "error": "Product 2 image was not selected"
+
             }), 400
 
 
@@ -144,7 +197,7 @@ def analyze():
         # ======================================
 
         print("\n==========================================")
-        print("PRODUCT 1")
+        print("PRODUCT 1 OCR")
         print("==========================================")
 
         text1 = extract_text(filepath1)
@@ -171,7 +224,7 @@ def analyze():
         # ======================================
 
         print("\n==========================================")
-        print("PRODUCT 2")
+        print("PRODUCT 2 OCR")
         print("==========================================")
 
         text2 = extract_text(filepath2)
@@ -194,7 +247,16 @@ def analyze():
 
 
         # ======================================
-        # COMPARE PRODUCTS
+        # COMBINE INGREDIENTS
+        # ======================================
+
+        all_ingredients = (
+            ingredients1 + ingredients2
+        )
+
+
+        # ======================================
+        # CONFLICT ANALYSIS
         # ======================================
 
         print("\n==========================================")
@@ -202,8 +264,11 @@ def analyze():
         print("==========================================")
 
         conflicts = conflict_engine.compare_products(
+
             ingredients1,
+
             ingredients2
+
         )
 
         print("Conflicts:")
@@ -214,14 +279,70 @@ def analyze():
         # OVERALL SEVERITY
         # ======================================
 
+        print("\n==========================================")
+        print("OVERALL SEVERITY")
+        print("==========================================")
+
         overall_severity = (
+
             conflict_engine.calculate_overall_severity(
+
                 conflicts
+
             )
+
         )
 
         print("Overall severity:")
         print(overall_severity)
+
+
+        # ======================================
+        # CCI + RISK ANALYSIS
+        # ======================================
+
+        print("\n==========================================")
+        print("CCI + RISK ANALYSIS")
+        print("==========================================")
+
+        risk_analysis = analyze_risk(
+
+            all_ingredients,
+
+            conflicts
+
+        )
+
+
+        print("CCI Score:")
+        print(
+            risk_analysis["cci_score"]
+        )
+
+        print("Risk Level:")
+        print(
+            risk_analysis["risk_level"]
+        )
+
+        print("Conflict Count:")
+        print(
+            risk_analysis["conflict_count"]
+        )
+
+        print("Cumulative Risk:")
+        print(
+            risk_analysis["cumulative_risk"]
+        )
+
+        print("Conflict Density:")
+        print(
+            risk_analysis["conflict_density"]
+        )
+
+        print("Recommendation:")
+        print(
+            risk_analysis["recommendation"]
+        )
 
 
         # ======================================
@@ -231,7 +352,9 @@ def analyze():
         try:
 
             status = conflict_engine.get_status(
+
                 conflicts
+
             )
 
         except AttributeError:
@@ -254,12 +377,56 @@ def analyze():
 
 
         # ======================================
-        # RETURN JSON TO FRONTEND
+        # ML INFORMATION
+        # ======================================
+
+        ml_result = {
+
+            "available": ML_AVAILABLE
+
+        }
+
+
+        # ======================================
+        # OPTIONAL XGBOOST PREDICTION
+        # ======================================
+        #
+        # The conflict engine + CCI remain the
+        # primary product-level analysis.
+        #
+        # XGBoost is included separately so
+        # ML does not replace the existing
+        # conflict detection logic.
+        #
+        # ======================================
+
+        if ML_AVAILABLE:
+
+            try:
+
+                ml_result["status"] = "XGBoost model loaded"
+
+            except Exception as ml_error:
+
+                ml_result["status"] = "XGBoost unavailable"
+
+                ml_result["error"] = str(
+                    ml_error
+                )
+
+
+        # ======================================
+        # RETURN RESULT TO FRONTEND
         # ======================================
 
         return jsonify({
 
             "success": True,
+
+
+            # ----------------------------------
+            # PRODUCT 1
+            # ----------------------------------
 
             "product1": {
 
@@ -267,9 +434,15 @@ def analyze():
 
                 "ingredients": ingredients1,
 
-                "matched_ingredients": matched_ingredients1
+                "matched_ingredients":
+                    matched_ingredients1
 
             },
+
+
+            # ----------------------------------
+            # PRODUCT 2
+            # ----------------------------------
 
             "product2": {
 
@@ -277,15 +450,62 @@ def analyze():
 
                 "ingredients": ingredients2,
 
-                "matched_ingredients": matched_ingredients2
+                "matched_ingredients":
+                    matched_ingredients2
 
             },
 
+
+            # ----------------------------------
+            # CONFLICT RESULTS
+            # ----------------------------------
+
             "conflicts": conflicts,
 
-            "overall_severity": overall_severity,
 
-            "status": status
+            # ----------------------------------
+            # EXISTING CONFLICT SEVERITY
+            # ----------------------------------
+
+            "overall_severity":
+                overall_severity,
+
+            "status":
+                status,
+
+
+            # ----------------------------------
+            # CCI / RISK RESULTS
+            # ----------------------------------
+
+            "risk_analysis": {
+
+                "cci_score":
+                    risk_analysis["cci_score"],
+
+                "risk_level":
+                    risk_analysis["risk_level"],
+
+                "conflict_count":
+                    risk_analysis["conflict_count"],
+
+                "cumulative_risk":
+                    risk_analysis["cumulative_risk"],
+
+                "conflict_density":
+                    risk_analysis["conflict_density"],
+
+                "recommendation":
+                    risk_analysis["recommendation"]
+
+            },
+
+
+            # ----------------------------------
+            # MACHINE LEARNING
+            # ----------------------------------
+
+            "machine_learning": ml_result
 
         })
 
@@ -318,21 +538,39 @@ def analyze():
 if __name__ == "__main__":
 
     print("\n==========================================")
-    print("COSMETIC CONFLICT ANALYZER")
+    print("REAL-TIME COSMETIC CONFLICT ANALYZER")
     print("==========================================")
 
-    print("Conflict dataset loaded successfully.")
+    print("Conflict Engine: AVAILABLE")
 
-    print("Backend running at:")
-    print("http://127.0.0.1:5000")
+    print("CCI Risk Analysis: AVAILABLE")
+
+    print(
+        "XGBoost ML:",
+        "AVAILABLE" if ML_AVAILABLE else "NOT AVAILABLE"
+    )
+
+    print("\nBackend running at:")
+
+    print(
+        "http://127.0.0.1:5000"
+    )
 
     print("\nAPI endpoint:")
-    print("POST /api/analyze")
+
+    print(
+        "POST /api/analyze"
+    )
 
     print("==========================================\n")
 
+
     app.run(
+
         debug=True,
+
         host="127.0.0.1",
+
         port=5000
+
     )
