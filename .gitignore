@@ -6,3 +6,4 @@ venv/
 .vscode/
 .idea/
 static/uploads/
+/data/external/open_beauty_facts/open_beauty_facts_raw.csv

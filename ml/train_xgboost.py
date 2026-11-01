@@ -1,3 +1,4 @@
+
 import os
 import pickle
 import re
@@ -6,26 +7,22 @@ import warnings
 import numpy as np
 import pandas as pd
 import shap
+import matplotlib.pyplot as plt
 
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import (
     accuracy_score,
+    balanced_accuracy_score,
     classification_report,
     confusion_matrix,
-    balanced_accuracy_score,
+    ConfusionMatrixDisplay,
     f1_score,
     precision_score,
     recall_score
 )
-from sklearn.utils.class_weight import compute_sample_weight
 
 from xgboost import XGBClassifier
-
-from external_evidence import (
-    load_external_evidence,
-    get_external_co_occurrence
-)
 
 
 warnings.filterwarnings("ignore")
@@ -35,9 +32,23 @@ warnings.filterwarnings("ignore")
 # 1. PATHS
 # ============================================================
 
-DATA_PATH = "data/ingredient_pairs_augmented.xlsx"
+BASE_DIR = os.path.dirname(
+    os.path.dirname(
+        os.path.abspath(__file__)
+    )
+)
 
-MODEL_DIR = "ml/model"
+DATA_PATH = os.path.join(
+    BASE_DIR,
+    "data",
+    "combined_ingredient_pairs2.xlsx"
+)
+
+MODEL_DIR = os.path.join(
+    BASE_DIR,
+    "ml",
+    "model"
+)
 
 os.makedirs(
     MODEL_DIR,
@@ -45,109 +56,267 @@ os.makedirs(
 )
 
 
+MODEL_PATH = os.path.join(
+    MODEL_DIR,
+    "xgboost_risk_model.json"
+)
+
+VECTORIZER_PATH = os.path.join(
+    MODEL_DIR,
+    "tfidf_vectorizer.pkl"
+)
+
+RISK_CLASSES_PATH = os.path.join(
+    MODEL_DIR,
+    "risk_classes.npy"
+)
+
+FEATURE_NAMES_PATH = os.path.join(
+    MODEL_DIR,
+    "feature_names.npy"
+)
+
+SHAP_VALUES_PATH = os.path.join(
+    MODEL_DIR,
+    "shap_values.npy"
+)
+
+SHAP_BASE_VALUES_PATH = os.path.join(
+    MODEL_DIR,
+    "shap_base_values.npy"
+)
+
+MODEL_INFO_PATH = os.path.join(
+    MODEL_DIR,
+    "model_info.pkl"
+)
+
+CONFUSION_MATRIX_CSV = os.path.join(
+    MODEL_DIR,
+    "confusion_matrix.csv"
+)
+
+CONFUSION_MATRIX_PNG = os.path.join(
+    MODEL_DIR,
+    "confusion_matrix.png"
+)
+
+
 # ============================================================
-# 2. LOAD DATASET
+# 2. RISK CLASSES
 # ============================================================
 
-print("\n========================================")
-print("LOADING COSMETIC CONFLICT DATASET")
-print("========================================")
-
-if not os.path.exists(DATA_PATH):
-
-    raise FileNotFoundError(
-        f"\nDataset not found:\n{DATA_PATH}\n"
-        "Run this script from the project root."
-    )
-
-
-df = pd.read_excel(DATA_PATH)
-
-print("Dataset loaded successfully!")
-print("Rows:", len(df))
-print("Columns:", df.columns.tolist())
-
-
-# ============================================================
-# 3. REQUIRED COLUMNS
-# ============================================================
-
-required_columns = [
-    "Ingredient_1",
-    "Ingredient_2",
-    "Severity"
+RISK_CLASSES = [
+    "Safe",
+    "Medium Risk",
+    "High Risk"
 ]
 
-missing = [c for c in required_columns if c not in df.columns]
-
-if missing:
-    raise ValueError(
-        f"Missing required columns: {missing}"
-    )
-
-# Co_Occurrence_Count is optional in the augmented dataset.
-# If it is missing, use 0 as the internal co-occurrence value.
-if "Co_Occurrence_Count" not in df.columns:
-    print("Co_Occurrence_Count not found.")
-    print("Creating Co_Occurrence_Count = 0 for all rows.")
-    df["Co_Occurrence_Count"] = 0
-
 
 # ============================================================
-# 4. CLEAN DATA
+# 3. CLEAN INGREDIENT
 # ============================================================
-
-print("\n========================================")
-print("CLEANING DATASET")
-print("========================================")
-
-
-df = df.dropna(
-    subset=required_columns
-).copy()
-
 
 def clean_ingredient(value):
 
     value = str(value).lower().strip()
 
-    # Replace separators
-    value = value.replace("-", " ")
-    value = value.replace("_", " ")
+    value = value.replace(
+        "-",
+        " "
+    )
 
-    # Remove special characters
+    value = value.replace(
+        "_",
+        " "
+    )
+
     value = re.sub(
         r"[^a-z0-9\s]",
         " ",
         value
     )
 
-    # Remove repeated spaces
     value = re.sub(
         r"\s+",
         " ",
         value
-    ).strip()
+    )
 
-    return value
+    return value.strip()
 
 
-df["Ingredient_1"] = (
-    df["Ingredient_1"]
-    .apply(clean_ingredient)
+# ============================================================
+# 4. CREATE MODEL TEXT
+# ============================================================
+
+def create_model_text(
+    ingredient_1,
+    ingredient_2
+):
+
+    ingredient_1 = clean_ingredient(
+        ingredient_1
+    )
+
+    ingredient_2 = clean_ingredient(
+        ingredient_2
+    )
+
+    token_1 = ingredient_1.replace(
+        " ",
+        "_"
+    )
+
+    token_2 = ingredient_2.replace(
+        " ",
+        "_"
+    )
+
+    canonical_pair = "||".join(
+        sorted([
+            ingredient_1,
+            ingredient_2
+        ])
+    )
+
+    pair_token = (
+        canonical_pair
+        .replace(
+            "||",
+            "__"
+        )
+        .replace(
+            " ",
+            "_"
+        )
+    )
+
+    ingredient_text = (
+        "ING1_"
+        + token_1
+        + " "
+        + "ING2_"
+        + token_2
+    )
+
+    pair_text = (
+        "PAIR_"
+        + pair_token
+    )
+
+    return (
+        ingredient_text
+        + " "
+        + pair_text
+    )
+
+
+# ============================================================
+# 5. LOAD DATASET
+# ============================================================
+
+print("\n========================================")
+print("LOADING TRAINING DATA")
+print("========================================")
+
+
+if not os.path.exists(DATA_PATH):
+
+    raise FileNotFoundError(
+        f"Dataset not found:\n{DATA_PATH}"
+    )
+
+
+df = pd.read_excel(
+    DATA_PATH
 )
 
 
-df["Ingredient_2"] = (
-    df["Ingredient_2"]
-    .apply(clean_ingredient)
+print(
+    "Dataset loaded successfully!"
+)
+
+print(
+    "Rows:",
+    len(df)
+)
+
+print(
+    "Columns:",
+    df.columns.tolist()
 )
 
 
-df["Co_Occurrence_Count"] = pd.to_numeric(
-    df["Co_Occurrence_Count"],
-    errors="coerce"
-).fillna(0)
+# ============================================================
+# 6. NORMALIZE COLUMN NAMES
+# ============================================================
+
+df.columns = (
+    df.columns
+    .astype(str)
+    .str.strip()
+)
+
+
+# Accept either spelling of severity explanation
+if (
+    "Severity Explanation" not in df.columns
+    and
+    "Severity_Explanation" in df.columns
+):
+
+    df.rename(
+        columns={
+            "Severity_Explanation":
+            "Severity Explanation"
+        },
+        inplace=True
+    )
+
+
+# ============================================================
+# 7. REQUIRED COLUMNS
+# ============================================================
+
+required_columns = [
+    "Ingredient_A",
+    "Ingredient_B",
+    "Severity",
+    "Severity Explanation"
+]
+
+
+missing_columns = [
+    column
+    for column in required_columns
+    if column not in df.columns
+]
+
+
+if missing_columns:
+
+    raise ValueError(
+        "\nMissing required dataset columns:\n"
+        + "\n".join(missing_columns)
+        + "\n\nAvailable columns:\n"
+        + str(df.columns.tolist())
+    )
+
+
+# ============================================================
+# 8. CLEAN DATA
+# ============================================================
+
+df["Ingredient_A"] = (
+    df["Ingredient_A"]
+    .apply(clean_ingredient)
+)
+
+df["Ingredient_B"] = (
+    df["Ingredient_B"]
+    .apply(clean_ingredient)
+)
 
 
 df["Severity"] = (
@@ -159,12 +328,32 @@ df["Severity"] = (
 
 
 # ============================================================
-# 5. RISK MAPPING
+# 9. REMOVE EMPTY ROWS
 # ============================================================
 
-risk_mapping = {
+df = df[
+    (df["Ingredient_A"] != "")
+    &
+    (df["Ingredient_B"] != "")
+    &
+    (df["Severity"] != "")
+]
+
+
+df = df.reset_index(
+    drop=True
+)
+
+
+# ============================================================
+# 10. CONVERT SEVERITY LABELS
+# ============================================================
+
+severity_mapping = {
 
     "safe": 0,
+
+    "low": 0,
 
     "medium": 1,
 
@@ -177,418 +366,63 @@ risk_mapping = {
 }
 
 
-df = df[
-    df["Severity"].isin(
-        risk_mapping.keys()
-    )
-].copy()
-
-
-df["Risk_Label"] = (
+df["Severity_Label"] = (
     df["Severity"]
-    .map(risk_mapping)
+    .map(severity_mapping)
 )
 
 
 # ============================================================
-# 6. REMOVE ONLY EXACT DUPLICATES
+# 11. CHECK INVALID LABELS
 # ============================================================
 
-print("\nRemoving exact duplicate rows...")
+invalid_labels = df[
+    df["Severity_Label"].isna()
+]["Severity"].unique()
 
 
-before_duplicates = len(df)
+if len(invalid_labels) > 0:
+
+    raise ValueError(
+        "\nUnknown severity labels found:\n"
+        + str(invalid_labels)
+        + "\n\nExpected labels:\n"
+        + str(list(severity_mapping.keys()))
+    )
 
 
-df = df.drop_duplicates(
-    subset=[
-        "Ingredient_1",
-        "Ingredient_2",
-        "Co_Occurrence_Count",
-        "Severity"
-    ]
-).reset_index(drop=True)
-
-
-after_duplicates = len(df)
-
-
-print(
-    "Exact duplicates removed:",
-    before_duplicates - after_duplicates
+df["Severity_Label"] = (
+    df["Severity_Label"]
+    .astype(int)
 )
 
 
+# ============================================================
+# 12. DATASET SUMMARY
+# ============================================================
+
+print("\n========================================")
+print("DATASET SUMMARY")
+print("========================================")
+
 print(
-    "Rows after cleaning:",
+    "Total samples:",
     len(df)
 )
 
-
-# ============================================================
-# 7. CREATE CANONICAL PAIR
-# ============================================================
-
-"""
-Canonical pair is used as an additional feature.
-
-Example:
-
-retinol + salicylic acid
-
-and
-
-salicylic acid + retinol
-
-produce the same canonical pair.
-
-We DO NOT remove rows using this field because the
-augmented dataset may contain useful repeated evidence.
-"""
-
-
-df["Canonical_Pair"] = df.apply(
-
-    lambda row:
-    "||".join(
-        sorted([
-            row["Ingredient_1"],
-            row["Ingredient_2"]
-        ])
-    ),
-
-    axis=1
-
+print(
+    "\nClass distribution:"
 )
-
-
-# ============================================================
-# 8. LOAD EXTERNAL EVIDENCE
-# ============================================================
-
-print("\n========================================")
-print("LOADING EXTERNAL EVIDENCE")
-print("========================================")
-
-
-external_df = load_external_evidence()
-
-
-# ============================================================
-# 9. EXTERNAL CO-OCCURRENCE
-# ============================================================
-
-print("\n========================================")
-print("ADDING EXTERNAL EVIDENCE")
-print("========================================")
-
-
-df["External_Co_Occurrence"] = df.apply(
-
-    lambda row:
-
-    get_external_co_occurrence(
-
-        row["Ingredient_1"],
-
-        row["Ingredient_2"],
-
-        external_df
-
-    ),
-
-    axis=1
-
-)
-
-
-# Log transformation prevents very large
-# external counts from dominating the model.
-
-df["External_Co_Occurrence_Log"] = np.log1p(
-    df["External_Co_Occurrence"]
-)
-
 
 print(
-    "External evidence feature added!"
-)
-
-
-print(
-    "Pairs with external evidence:",
-    int(
-        (
-            df["External_Co_Occurrence"] > 0
-        ).sum()
-    )
-)
-
-
-print(
-    "Maximum external co-occurrence:",
-    float(
-        df["External_Co_Occurrence"].max()
-    )
-)
-
-
-# ============================================================
-# 10. INTERNAL CO-OCCURRENCE
-# ============================================================
-
-df["Co_Occurrence_Log"] = np.log1p(
-    df["Co_Occurrence_Count"]
-)
-
-
-# ============================================================
-# 11. RISK DISTRIBUTION
-# ============================================================
-
-print("\n========================================")
-print("RISK DISTRIBUTION")
-print("========================================")
-
-
-distribution = (
-    df["Severity"]
+    df["Severity_Label"]
     .value_counts()
-)
-
-
-print(distribution)
-
-
-print("\nClass counts:")
-
-
-print(
-    "Safe:",
-    distribution.get(
-        "safe",
-        0
-    )
-)
-
-
-print(
-    "Medium Risk:",
-    distribution.get(
-        "medium risk",
-        0
-    ) +
-    distribution.get(
-        "medium",
-        0
-    )
-)
-
-
-print(
-    "High Risk:",
-    distribution.get(
-        "high risk",
-        0
-    ) +
-    distribution.get(
-        "high",
-        0
-    )
+    .sort_index()
 )
 
 
 # ============================================================
-# 12. CREATE TARGET
-# ============================================================
-
-y = df[
-    "Risk_Label"
-].astype(int).values
-
-
-print("\nRisk mapping:")
-print("0 = Safe")
-print("1 = Medium Risk")
-print("2 = High Risk")
-
-
-# ============================================================
-# 13. CREATE INGREDIENT FEATURES
-# ============================================================
-
-print("\n========================================")
-print("CREATING INGREDIENT FEATURES")
-print("========================================")
-
-
-def ingredient_token(value):
-
-    return (
-        str(value)
-        .replace(" ", "_")
-        .strip()
-    )
-
-
-df["Ingredient_1_Token"] = (
-    df["Ingredient_1"]
-    .apply(ingredient_token)
-)
-
-
-df["Ingredient_2_Token"] = (
-    df["Ingredient_2"]
-    .apply(ingredient_token)
-)
-
-
-df["Pair_Token"] = (
-    df["Canonical_Pair"]
-    .str.replace(
-        "||",
-        "__",
-        regex=False
-    )
-    .str.replace(
-        " ",
-        "_",
-        regex=False
-    )
-)
-
-
-# ------------------------------------------------------------
-# Ingredient identity
-# ------------------------------------------------------------
-
-df["Ingredient_Text"] = (
-
-    "ING1_"
-    + df["Ingredient_1_Token"]
-
-    + " "
-
-    + "ING2_"
-    + df["Ingredient_2_Token"]
-
-)
-
-
-# ------------------------------------------------------------
-# Explicit pair identity
-# ------------------------------------------------------------
-
-df["Pair_Text"] = (
-
-    "PAIR_"
-    + df["Pair_Token"]
-
-)
-
-
-# ------------------------------------------------------------
-# Combined model text
-# ------------------------------------------------------------
-
-df["Model_Text"] = (
-
-    df["Ingredient_Text"]
-
-    + " "
-
-    + df["Pair_Text"]
-
-)
-
-
-# ============================================================
-# 14. TRAIN / TEST SPLIT
-# ============================================================
-
-print("\n========================================")
-print("TRAIN / TEST SPLIT")
-print("========================================")
-
-
-(
-    text_train,
-    text_test,
-
-    y_train,
-    y_test,
-
-    count_train,
-    count_test,
-
-    ext_train,
-    ext_test
-
-) = train_test_split(
-
-    df["Model_Text"],
-
-    y,
-
-    df["Co_Occurrence_Log"].values,
-
-    df["External_Co_Occurrence_Log"].values,
-
-    test_size=0.20,
-
-    random_state=42,
-
-    stratify=y
-
-)
-
-
-print(
-    "Training samples:",
-    len(y_train)
-)
-
-
-print(
-    "Testing samples:",
-    len(y_test)
-)
-
-
-# ============================================================
-# 15. CHECK TRAINING CLASS DISTRIBUTION
-# ============================================================
-
-print("\nTraining class distribution:")
-
-
-unique_train, counts_train = np.unique(
-    y_train,
-    return_counts=True
-)
-
-
-for class_id, count in zip(
-    unique_train,
-    counts_train
-):
-
-    if class_id == 0:
-        name = "Safe"
-
-    elif class_id == 1:
-        name = "Medium Risk"
-
-    else:
-        name = "High Risk"
-
-    print(
-        f"{name}: {count}"
-    )
-
-
-# ============================================================
-# 16. TF-IDF
+# 13. CREATE TEXT FEATURES
 # ============================================================
 
 print("\n========================================")
@@ -596,263 +430,315 @@ print("CREATING TF-IDF FEATURES")
 print("========================================")
 
 
-vectorizer = TfidfVectorizer(
-
-    token_pattern=r"(?u)\b[A-Za-z0-9_]+\b",
-
-    ngram_range=(1, 2),
-
-    min_df=1,
-
-    sublinear_tf=True,
-
-    max_features=10000
-
-)
-
-
-X_train_text = (
-
-    vectorizer
-    .fit_transform(
-        text_train
-    )
-    .toarray()
-
-)
-
-
-X_test_text = (
-
-    vectorizer
-    .transform(
-        text_test
-    )
-    .toarray()
-
-)
-
-
-print(
-    "TF-IDF training shape:",
-    X_train_text.shape
-)
-
-
-print(
-    "TF-IDF testing shape:",
-    X_test_text.shape
+df["Model_Text"] = df.apply(
+    lambda row:
+        create_model_text(
+            row["Ingredient_A"],
+            row["Ingredient_B"]
+        ),
+    axis=1
 )
 
 
 # ============================================================
-# 17. NUMERICAL PAIR FEATURES
+# 14. TRAIN / TEST SPLIT
+# ============================================================
+
+X_text = df["Model_Text"]
+
+y = df["Severity_Label"]
+
+
+X_train_text, X_test_text, y_train, y_test = (
+    train_test_split(
+        X_text,
+        y,
+        test_size=0.20,
+        random_state=42,
+        stratify=y
+    )
+)
+
+
+print(
+    "\nTraining samples:",
+    len(X_train_text)
+)
+
+print(
+    "Testing samples:",
+    len(X_test_text)
+)
+
+
+# ============================================================
+# 15. TF-IDF
+# ============================================================
+
+vectorizer = TfidfVectorizer(
+    lowercase=False,
+    token_pattern=r"(?u)\b[A-Za-z0-9_]+\b",
+    ngram_range=(1, 2),
+    min_df=1
+)
+
+
+X_train_text_tfidf = (
+    vectorizer
+    .fit_transform(
+        X_train_text
+    )
+    .toarray()
+)
+
+
+X_test_text_tfidf = (
+    vectorizer
+    .transform(
+        X_test_text
+    )
+    .toarray()
+)
+
+
+# ============================================================
+# 16. EXTERNAL EVIDENCE FEATURES
 # ============================================================
 
 print("\n========================================")
-print("CREATING NUMERICAL FEATURES")
+print("LOADING EXTERNAL EVIDENCE")
 print("========================================")
 
 
-# ------------------------------------------------------------
-# Feature 1:
-# Internal co-occurrence
-# ------------------------------------------------------------
+try:
 
-train_internal = (
-    count_train
-    .reshape(-1, 1)
+    from external_evidence import (
+        load_external_evidence,
+        get_external_co_occurrence
+    )
+
+    external_df = (
+        load_external_evidence()
+    )
+
+    EXTERNAL_EVIDENCE_AVAILABLE = True
+
+    print(
+        "External evidence loaded successfully!"
+    )
+
+except Exception as e:
+
+    print(
+        "External evidence unavailable."
+    )
+
+    print(
+        "Error:",
+        str(e)
+    )
+
+    external_df = None
+
+    EXTERNAL_EVIDENCE_AVAILABLE = False
+
+
+# ============================================================
+# 17. EXTERNAL FEATURE CALCULATION
+# ============================================================
+
+def get_external_value(
+    ingredient_1,
+    ingredient_2
+):
+
+    if not EXTERNAL_EVIDENCE_AVAILABLE:
+
+        return 0.0
+
+    try:
+
+        value = (
+            get_external_co_occurrence(
+                clean_ingredient(
+                    ingredient_1
+                ),
+                clean_ingredient(
+                    ingredient_2
+                ),
+                external_df
+            )
+        )
+
+        if value is None:
+
+            return 0.0
+
+        return float(value)
+
+    except Exception:
+
+        return 0.0
+
+
+def create_external_features(
+    data_frame
+):
+
+    external_logs = []
+    external_indicators = []
+
+    for _, row in data_frame.iterrows():
+
+        value = get_external_value(
+            row["Ingredient_A"],
+            row["Ingredient_B"]
+        )
+
+        external_logs.append(
+            np.log1p(value)
+        )
+
+        external_indicators.append(
+            1.0 if value > 0 else 0.0
+        )
+
+    return (
+        np.array(
+            external_logs
+        ).reshape(-1, 1),
+        np.array(
+            external_indicators
+        ).reshape(-1, 1)
+    )
+
+
+# ============================================================
+# 18. CREATE TRAINING EXTERNAL FEATURES
+# ============================================================
+
+train_indices = X_train_text.index
+
+test_indices = X_test_text.index
+
+
+train_df = df.loc[
+    train_indices
+].copy()
+
+
+test_df = df.loc[
+    test_indices
+].copy()
+
+
+X_train_external_log, X_train_external_indicator = (
+    create_external_features(
+        train_df
+    )
 )
 
 
-test_internal = (
-    count_test
-    .reshape(-1, 1)
-)
-
-
-# ------------------------------------------------------------
-# Feature 2:
-# External co-occurrence
-# ------------------------------------------------------------
-
-train_external = (
-    ext_train
-    .reshape(-1, 1)
-)
-
-
-test_external = (
-    ext_test
-    .reshape(-1, 1)
-)
-
-
-# ------------------------------------------------------------
-# Feature 3:
-# External evidence indicator
-#
-# 1 = external evidence exists
-# 0 = no external evidence
-# ------------------------------------------------------------
-
-train_external_indicator = (
-    (ext_train > 0)
-    .astype(float)
-    .reshape(-1, 1)
-)
-
-
-test_external_indicator = (
-    (ext_test > 0)
-    .astype(float)
-    .reshape(-1, 1)
+X_test_external_log, X_test_external_indicator = (
+    create_external_features(
+        test_df
+    )
 )
 
 
 # ============================================================
-# 18. FINAL ML FEATURES
+# 19. FINAL FEATURES
 # ============================================================
 
 X_train = np.hstack([
 
-    X_train_text,
+    X_train_text_tfidf,
 
-    train_internal,
+    X_train_external_log,
 
-    train_external,
-
-    train_external_indicator
+    X_train_external_indicator
 
 ])
 
 
 X_test = np.hstack([
 
-    X_test_text,
+    X_test_text_tfidf,
 
-    test_internal,
+    X_test_external_log,
 
-    test_external,
-
-    test_external_indicator
+    X_test_external_indicator
 
 ])
 
 
 print(
-    "\nFinal training feature shape:",
+    "\nTraining feature shape:",
     X_train.shape
 )
 
-
 print(
-    "Final testing feature shape:",
+    "Testing feature shape:",
     X_test.shape
 )
 
 
-print(
-    "Total features:",
-    X_train.shape[1]
+# ============================================================
+# 20. FEATURE NAMES
+# ============================================================
+
+tfidf_feature_names = (
+    vectorizer
+    .get_feature_names_out()
 )
+
+
+feature_names = np.concatenate([
+
+    tfidf_feature_names,
+
+    [
+        "External_Co_Occurrence_Log",
+        "External_Evidence_Indicator"
+    ]
+
+])
 
 
 # ============================================================
-# 19. CLASS IMBALANCE
-# ============================================================
-
-print("\n========================================")
-print("HANDLING CLASS IMBALANCE")
-print("========================================")
-
-
-sample_weights = compute_sample_weight(
-
-    class_weight="balanced",
-
-    y=y_train
-
-)
-
-
-print(
-    "Sample weights generated successfully!"
-)
-
-
-print(
-    "Minimum weight:",
-    round(
-        float(
-            sample_weights.min()
-        ),
-        4
-    )
-)
-
-
-print(
-    "Maximum weight:",
-    round(
-        float(
-            sample_weights.max()
-        ),
-        4
-    )
-)
-
-
-# ============================================================
-# 20. TRAIN XGBOOST
+# 21. TRAIN XGBOOST
 # ============================================================
 
 print("\n========================================")
-print("TRAINING XGBOOST")
+print("TRAINING XGBOOST MODEL")
 print("========================================")
 
 
 model = XGBClassifier(
 
-    n_estimators=400,
-
-    max_depth=4,
-
-    learning_rate=0.035,
-
-    subsample=0.90,
-
-    colsample_bytree=0.85,
-
-    min_child_weight=1,
-
-    gamma=0.0,
-
-    reg_alpha=0.1,
-
-    reg_lambda=1.5,
-
     objective="multi:softprob",
 
     num_class=3,
 
-    eval_metric="mlogloss",
+    n_estimators=300,
+
+    max_depth=6,
+
+    learning_rate=0.05,
+
+    subsample=0.9,
+
+    colsample_bytree=0.9,
 
     random_state=42,
 
-    n_jobs=-1
-
+    eval_metric="mlogloss"
 )
 
 
 model.fit(
-
     X_train,
-
-    y_train,
-
-    sample_weight=sample_weights
-
+    y_train
 )
 
 
@@ -862,31 +748,33 @@ print(
 
 
 # ============================================================
-# 21. PREDICTION
+# 22. PREDICTION
 # ============================================================
 
-print("\nMaking predictions...")
+print("\n========================================")
+print("EVALUATING MODEL")
+print("========================================")
 
 
-y_pred = model.predict(
-    X_test
+y_pred = (
+    model
+    .predict(
+        X_test
+    )
 )
 
 
-y_probability = model.predict_proba(
-    X_test
-)
+y_pred = y_pred.astype(int)
 
 
 # ============================================================
-# 22. METRICS
+# 23. METRICS
 # ============================================================
 
 accuracy = accuracy_score(
     y_test,
     y_pred
 )
-
 
 balanced_accuracy = (
     balanced_accuracy_score(
@@ -895,99 +783,51 @@ balanced_accuracy = (
     )
 )
 
-
-macro_f1 = f1_score(
-
+precision = precision_score(
     y_test,
-
     y_pred,
-
-    average="macro",
-
+    average="weighted",
     zero_division=0
-
 )
 
-
-macro_precision = precision_score(
-
+recall = recall_score(
     y_test,
-
     y_pred,
-
-    average="macro",
-
+    average="weighted",
     zero_division=0
-
 )
 
-
-macro_recall = recall_score(
-
+f1 = f1_score(
     y_test,
-
     y_pred,
-
-    average="macro",
-
+    average="weighted",
     zero_division=0
-
 )
-
-
-# ============================================================
-# 23. RESULTS
-# ============================================================
-
-print("\n========================================")
-print("XGBOOST MODEL RESULTS")
-print("========================================")
 
 
 print(
-    "Accuracy:",
-    round(
-        accuracy * 100,
-        2
-    ),
-    "%"
+    "\nAccuracy:",
+    f"{accuracy * 100:.2f}%"
 )
-
 
 print(
     "Balanced Accuracy:",
-    round(
-        balanced_accuracy * 100,
-        2
-    ),
-    "%"
+    f"{balanced_accuracy * 100:.2f}%"
 )
 
-
 print(
-    "Macro Precision:",
-    round(
-        macro_precision,
-        4
-    )
+    "Precision:",
+    f"{precision * 100:.2f}%"
 )
 
-
 print(
-    "Macro Recall:",
-    round(
-        macro_recall,
-        4
-    )
+    "Recall:",
+    f"{recall * 100:.2f}%"
 )
 
-
 print(
-    "Macro F1:",
-    round(
-        macro_f1,
-        4
-    )
+    "F1 Score:",
+    f"{f1 * 100:.2f}%"
 )
 
 
@@ -1001,29 +841,13 @@ print("========================================")
 
 
 print(
-
     classification_report(
-
         y_test,
-
         y_pred,
-
-        labels=[
-            0,
-            1,
-            2
-        ],
-
-        target_names=[
-            "Safe",
-            "Medium Risk",
-            "High Risk"
-        ],
-
+        labels=[0, 1, 2],
+        target_names=RISK_CLASSES,
         zero_division=0
-
     )
-
 )
 
 
@@ -1037,36 +861,21 @@ print("========================================")
 
 
 cm = confusion_matrix(
-
     y_test,
-
     y_pred,
-
-    labels=[
-        0,
-        1,
-        2
-    ]
-
+    labels=[0, 1, 2]
 )
 
 
 cm_df = pd.DataFrame(
-
     cm,
+    index=RISK_CLASSES,
+    columns=RISK_CLASSES
+)
 
-    index=[
-        "Actual Safe",
-        "Actual Medium Risk",
-        "Actual High Risk"
-    ],
 
-    columns=[
-        "Predicted Safe",
-        "Predicted Medium Risk",
-        "Predicted High Risk"
-    ]
-
+cm_df.to_csv(
+    CONFUSION_MATRIX_CSV
 )
 
 
@@ -1076,381 +885,166 @@ print(
 
 
 # ============================================================
-# 26. SAVE XGBOOST MODEL
+# 26. SAVE CONFUSION MATRIX IMAGE
 # ============================================================
 
-model_path = os.path.join(
-
-    MODEL_DIR,
-
-    "xgboost_risk_model.json"
-
+disp = ConfusionMatrixDisplay(
+    confusion_matrix=cm,
+    display_labels=RISK_CLASSES
 )
 
 
-model.save_model(
-    model_path
+fig, ax = plt.subplots(
+    figsize=(8, 6)
 )
+
+
+disp.plot(
+    ax=ax,
+    values_format="d"
+)
+
+
+plt.title(
+    "XGBoost Cosmetic Risk Confusion Matrix"
+)
+
+plt.tight_layout()
+
+
+plt.savefig(
+    CONFUSION_MATRIX_PNG,
+    dpi=300,
+    bbox_inches="tight"
+)
+
+
+plt.close()
 
 
 print(
-    "\nXGBoost model saved:"
+    "\nConfusion matrix saved:"
 )
-
 
 print(
-    model_path
+    CONFUSION_MATRIX_PNG
 )
 
 
 # ============================================================
-# 27. SAVE TF-IDF VECTORIZER
-# ============================================================
-
-vectorizer_path = os.path.join(
-
-    MODEL_DIR,
-
-    "tfidf_vectorizer.pkl"
-
-)
-
-
-with open(
-
-    vectorizer_path,
-
-    "wb"
-
-) as f:
-
-    pickle.dump(
-
-        vectorizer,
-
-        f
-
-    )
-
-
-print(
-    "TF-IDF vectorizer saved:"
-)
-
-
-print(
-    vectorizer_path
-)
-
-
-# ============================================================
-# 28. SAVE RISK CLASSES
-# ============================================================
-
-risk_classes = np.array([
-
-    "Safe",
-
-    "Medium Risk",
-
-    "High Risk"
-
-])
-
-
-np.save(
-
-    os.path.join(
-
-        MODEL_DIR,
-
-        "risk_classes.npy"
-
-    ),
-
-    risk_classes
-
-)
-
-
-# ============================================================
-# 29. SAVE FEATURE NAMES
-# ============================================================
-
-feature_names = list(
-
-    vectorizer
-    .get_feature_names_out()
-
-)
-
-
-feature_names.append(
-    "Co_Occurrence_Log"
-)
-
-
-feature_names.append(
-    "External_Co_Occurrence_Log"
-)
-
-
-feature_names.append(
-    "External_Evidence_Indicator"
-)
-
-
-np.save(
-
-    os.path.join(
-
-        MODEL_DIR,
-
-        "feature_names.npy"
-
-    ),
-
-    np.array(
-        feature_names
-    )
-
-)
-
-
-# ============================================================
-# 30. SAVE MODEL METADATA
-# ============================================================
-
-model_info = {
-
-    "model":
-        "XGBoost",
-
-    "task":
-        "Cosmetic Ingredient Conflict Risk Prediction",
-
-    "classes":
-        [
-            "Safe",
-            "Medium Risk",
-            "High Risk"
-        ],
-
-    "accuracy":
-        float(
-            accuracy
-        ),
-
-    "balanced_accuracy":
-        float(
-            balanced_accuracy
-        ),
-
-    "macro_precision":
-        float(
-            macro_precision
-        ),
-
-    "macro_recall":
-        float(
-            macro_recall
-        ),
-
-    "macro_f1":
-        float(
-            macro_f1
-        ),
-
-    "training_rows":
-        int(
-            len(X_train)
-        ),
-
-    "testing_rows":
-        int(
-            len(X_test)
-        ),
-
-    "features":
-        int(
-            X_train.shape[1]
-        ),
-
-    "tfidf_enabled":
-        True,
-
-    "ingredient_identity_features":
-        True,
-
-    "canonical_pair_features":
-        True,
-
-    "co_occurrence_feature":
-        True,
-
-    "external_evidence_enabled":
-        True,
-
-    "external_evidence_log_scaled":
-        True,
-
-    "external_evidence_indicator":
-        True,
-
-    "class_imbalance_handling":
-        True,
-
-    "shap_enabled":
-        True
-
-}
-
-
-with open(
-
-    os.path.join(
-
-        MODEL_DIR,
-
-        "model_info.pkl"
-
-    ),
-
-    "wb"
-
-) as f:
-
-    pickle.dump(
-
-        model_info,
-
-        f
-
-    )
-
-
-# ============================================================
-# 31. SHAP EXPLAINABILITY
+# 27. SAVE MODEL
 # ============================================================
 
 print("\n========================================")
-print("GENERATING SHAP EXPLANATIONS")
+print("SAVING MODEL")
+print("========================================")
+
+
+model.save_model(
+    MODEL_PATH
+)
+
+
+print(
+    "XGBoost model saved!"
+)
+
+
+# ============================================================
+# 28. SAVE TF-IDF
+# ============================================================
+
+with open(
+    VECTORIZER_PATH,
+    "wb"
+) as f:
+
+    pickle.dump(
+        vectorizer,
+        f
+    )
+
+
+print(
+    "TF-IDF vectorizer saved!"
+)
+
+
+# ============================================================
+# 29. SAVE RISK CLASSES
+# ============================================================
+
+np.save(
+    RISK_CLASSES_PATH,
+    np.array(
+        RISK_CLASSES,
+        dtype=object
+    )
+)
+
+
+# ============================================================
+# 30. SAVE FEATURE NAMES
+# ============================================================
+
+np.save(
+    FEATURE_NAMES_PATH,
+    feature_names
+)
+
+
+# ============================================================
+# 31. SHAP EXPLANATION
+# ============================================================
+
+print("\n========================================")
+print("GENERATING SHAP VALUES")
 print("========================================")
 
 
 try:
 
-    # --------------------------------------------------------
-    # Use a small background set because permutation SHAP can
-    # be expensive with many TF-IDF features.
-    # --------------------------------------------------------
-
-    background_size = min(
-        10,
-        len(X_train)
-    )
-
-
-    background_data = (
-        X_train[
-            :background_size
-        ]
-    )
-
-
-    print(
-        "SHAP background samples:",
-        background_size
-    )
-
-
-    explainer = shap.Explainer(
-
-        model.predict_proba,
-
-        background_data,
-
-        algorithm="permutation"
-
-    )
-
-
-    sample_size = min(
-        10,
+    # Use a small sample for faster SHAP calculation
+    shap_sample_size = min(
+        100,
         len(X_test)
     )
 
+    X_shap = X_test[
+        :shap_sample_size
+    ]
 
-    X_sample = (
-        X_test[
-            :sample_size
-        ]
+    explainer = shap.TreeExplainer(
+        model
     )
 
-
-    print(
-        "SHAP explanation samples:",
-        sample_size
+    shap_explanation = (
+        explainer(
+            X_shap
+        )
     )
 
-
-    shap_explanation = explainer(
-        X_sample
-    )
-
-
-    print(
-        "SHAP explanation generated successfully!"
-    )
-
-
-    # --------------------------------------------------------
-    # SAVE SHAP VALUES
-    # --------------------------------------------------------
-
-    np.save(
-
-        os.path.join(
-
-            MODEL_DIR,
-
-            "shap_values.npy"
-
-        ),
-
+    shap_values = (
         shap_explanation.values
-
     )
 
-
-    print(
-        "SHAP values saved."
+    base_values = (
+        shap_explanation.base_values
     )
-
-
-    # --------------------------------------------------------
-    # SAVE BASE VALUES
-    # --------------------------------------------------------
 
     np.save(
-
-        os.path.join(
-
-            MODEL_DIR,
-
-            "shap_base_values.npy"
-
-        ),
-
-        shap_explanation.base_values
-
+        SHAP_VALUES_PATH,
+        shap_values
     )
 
+    np.save(
+        SHAP_BASE_VALUES_PATH,
+        base_values
+    )
 
     print(
-        "SHAP base values saved."
+        "SHAP values saved!"
     )
-
 
 except Exception as e:
 
@@ -1466,485 +1060,125 @@ except Exception as e:
         str(e)
     )
 
-    raise
+
+# ============================================================
+# 32. SAVE MODEL INFORMATION
+# ============================================================
+
+model_info = {
+
+    "dataset": DATA_PATH,
+
+    "total_samples": len(df),
+
+    "training_samples": len(X_train),
+
+    "testing_samples": len(X_test),
+
+    "feature_count": X_train.shape[1],
+
+    "accuracy": accuracy,
+
+    "balanced_accuracy": balanced_accuracy,
+
+    "precision": precision,
+
+    "recall": recall,
+
+    "f1_score": f1,
+
+    "risk_classes": RISK_CLASSES,
+
+    "co_occurrence_used": False,
+
+    "external_evidence_used":
+        EXTERNAL_EVIDENCE_AVAILABLE
+
+}
+
+
+with open(
+    MODEL_INFO_PATH,
+    "wb"
+) as f:
+
+    pickle.dump(
+        model_info,
+        f
+    )
 
 
 # ============================================================
-# 32. TEST KNOWN HIGH-RISK PAIRS
+# 33. FINAL OUTPUT
 # ============================================================
 
 print("\n========================================")
-print("TESTING KNOWN HIGH-RISK COMBINATIONS")
-print("========================================")
-
-
-known_high_risk_pairs = [
-
-    (
-        "retinol",
-        "benzoyl peroxide"
-    ),
-
-    (
-        "retinol",
-        "salicylic acid"
-    ),
-
-    (
-        "retinol",
-        "glycolic acid"
-    ),
-
-    (
-        "retinol",
-        "lactic acid"
-    ),
-
-    (
-        "retinol",
-        "mandelic acid"
-    ),
-
-    (
-        "retinol",
-        "azelaic acid"
-    ),
-
-    (
-        "benzoyl peroxide",
-        "salicylic acid"
-    ),
-
-    (
-        "benzoyl peroxide",
-        "glycolic acid"
-    ),
-
-    (
-        "salicylic acid",
-        "glycolic acid"
-    ),
-
-    (
-        "salicylic acid",
-        "lactic acid"
-    ),
-
-    (
-        "ascorbic acid",
-        "benzoyl peroxide"
-    ),
-
-    (
-        "vitamin c",
-        "benzoyl peroxide"
-    ),
-
-    (
-        "retinol",
-        "vitamin c"
-    ),
-
-    (
-        "retinol",
-        "ascorbic acid"
-    ),
-
-    (
-        "aha",
-        "retinol"
-    ),
-
-    (
-        "bha",
-        "retinol"
-    ),
-
-    (
-        "tretinoin",
-        "benzoyl peroxide"
-    ),
-
-    (
-        "tretinoin",
-        "salicylic acid"
-    )
-
-]
-
-
-def create_model_text(
-    ingredient_a,
-    ingredient_b
-):
-
-    ingredient_a = clean_ingredient(
-        ingredient_a
-    )
-
-    ingredient_b = clean_ingredient(
-        ingredient_b
-    )
-
-    token_a = ingredient_token(
-        ingredient_a
-    )
-
-    token_b = ingredient_token(
-        ingredient_b
-    )
-
-    canonical_pair = "||".join(
-
-        sorted([
-            ingredient_a,
-            ingredient_b
-        ])
-
-    )
-
-    pair_token = (
-
-        canonical_pair
-
-        .replace(
-            "||",
-            "__"
-        )
-
-        .replace(
-            " ",
-            "_"
-        )
-
-    )
-
-    ingredient_text = (
-
-        "ING1_"
-        + token_a
-
-        + " "
-
-        + "ING2_"
-        + token_b
-
-    )
-
-    pair_text = (
-
-        "PAIR_"
-        + pair_token
-
-    )
-
-    return (
-
-        ingredient_text
-        + " "
-        + pair_text
-
-    )
-
-
-test_texts = [
-
-    create_model_text(
-        a,
-        b
-    )
-
-    for a, b
-    in known_high_risk_pairs
-
-]
-
-
-test_text_features = (
-
-    vectorizer
-    .transform(
-        test_texts
-    )
-    .toarray()
-
-)
-
-
-# ------------------------------------------------------------
-# For unknown test pairs, external evidence is loaded again.
-# ------------------------------------------------------------
-
-test_internal_features = []
-test_external_features = []
-test_external_indicators = []
-
-
-for ingredient_a, ingredient_b in known_high_risk_pairs:
-
-    internal_value = 0.0
-
-    try:
-
-        external_value = (
-            get_external_co_occurrence(
-
-                clean_ingredient(
-                    ingredient_a
-                ),
-
-                clean_ingredient(
-                    ingredient_b
-                ),
-
-                external_df
-
-            )
-        )
-
-    except Exception:
-
-        external_value = 0.0
-
-
-    test_internal_features.append(
-        np.log1p(
-            internal_value
-        )
-    )
-
-
-    test_external_features.append(
-        np.log1p(
-            external_value
-        )
-    )
-
-
-    test_external_indicators.append(
-
-        1.0
-        if external_value > 0
-        else 0.0
-
-    )
-
-
-test_internal_features = np.array(
-
-    test_internal_features
-
-).reshape(
-    -1,
-    1
-)
-
-
-test_external_features = np.array(
-
-    test_external_features
-
-).reshape(
-    -1,
-    1
-)
-
-
-test_external_indicators = np.array(
-
-    test_external_indicators
-
-).reshape(
-    -1,
-    1
-)
-
-
-X_known_high_risk = np.hstack([
-
-    test_text_features,
-
-    test_internal_features,
-
-    test_external_features,
-
-    test_external_indicators
-
-])
-
-
-known_predictions = model.predict(
-    X_known_high_risk
-)
-
-
-known_probabilities = model.predict_proba(
-    X_known_high_risk
-)
-
-
-print()
-
-
-for i, (
-    ingredient_a,
-    ingredient_b
-) in enumerate(
-    known_high_risk_pairs
-):
-
-    prediction_id = int(
-        known_predictions[i]
-    )
-
-
-    if prediction_id == 0:
-
-        prediction = "Safe"
-
-    elif prediction_id == 1:
-
-        prediction = "Medium Risk"
-
-    else:
-
-        prediction = "High Risk"
-
-
-    probabilities = (
-        known_probabilities[i]
-    )
-
-
-    print(
-        f"{ingredient_a} + {ingredient_b}"
-    )
-
-
-    print(
-        f"Prediction: {prediction}"
-    )
-
-
-    print(
-        f"Safe:        {probabilities[0]:.4f}"
-    )
-
-
-    print(
-        f"Medium Risk: {probabilities[1]:.4f}"
-    )
-
-
-    print(
-        f"High Risk:   {probabilities[2]:.4f}"
-    )
-
-
-    print("-" * 50)
-
-
-# ============================================================
-# 33. HIGH-RISK TEST SUMMARY
-# ============================================================
-
-high_risk_predictions = (
-
-    known_predictions == 2
-
-).sum()
-
-
-total_high_risk_tests = (
-    len(known_high_risk_pairs)
-)
-
-
-print("\n========================================")
-print("HIGH-RISK TEST SUMMARY")
+print("TRAINING COMPLETED SUCCESSFULLY")
 print("========================================")
 
 
 print(
-    "Known High Risk pairs tested:",
-    total_high_risk_tests
+    "\nGenerated files:"
+)
+
+print(
+    "1.",
+    MODEL_PATH
+)
+
+print(
+    "2.",
+    VECTORIZER_PATH
+)
+
+print(
+    "3.",
+    RISK_CLASSES_PATH
+)
+
+print(
+    "4.",
+    FEATURE_NAMES_PATH
+)
+
+print(
+    "5.",
+    SHAP_VALUES_PATH
+)
+
+print(
+    "6.",
+    SHAP_BASE_VALUES_PATH
+)
+
+print(
+    "7.",
+    MODEL_INFO_PATH
+)
+
+print(
+    "8.",
+    CONFUSION_MATRIX_CSV
+)
+
+print(
+    "9.",
+    CONFUSION_MATRIX_PNG
 )
 
 
 print(
-    "Predicted High Risk:",
-    int(
-        high_risk_predictions
-    )
+    "\n========================================"
 )
-
 
 print(
-    "High Risk recognition:",
-    round(
-
-        (
-            high_risk_predictions
-            / total_high_risk_tests
-        )
-        * 100,
-
-        2
-
-    ),
-    "%"
+    "XGBOOST + EXTERNAL EVIDENCE + SHAP"
 )
-
-
-# ============================================================
-# 34. FINAL OUTPUT
-# ============================================================
-
-print("\n========================================")
-print("MEMBER 3 ML PIPELINE COMPLETED")
-print("========================================")
-
-
-print("\nGenerated files:")
-
 
 print(
-    "1. ml/model/xgboost_risk_model.json"
+    "WITHOUT CO-OCCURRENCE COUNT"
 )
-
 
 print(
-    "2. ml/model/tfidf_vectorizer.pkl"
+    "========================================"
 )
-
-
-print(
-    "3. ml/model/risk_classes.npy"
-)
-
-
-print(
-    "4. ml/model/feature_names.npy"
-)
-
-
-print(
-    "5. ml/model/shap_values.npy"
-)
-
-
-print(
-    "6. ml/model/shap_base_values.npy"
-)
-
-
-print(
-    "7. ml/model/model_info.pkl"
-)
-
-
-print("\n========================================")
-print("XGBOOST + EXTERNAL EVIDENCE + SHAP")
-print("COMPLETED SUCCESSFULLY")
-print("========================================")
-

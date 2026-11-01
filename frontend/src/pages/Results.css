@@ -803,3 +803,118 @@
   }
 
 }
+
+/* ==========================================
+   CONFLICT-SPECIFIC XGBOOST + SHAP
+========================================== */
+
+/* XGBoost prediction inside conflict card */
+
+.conflict-ml {
+  margin-top: 20px;
+  padding: 15px;
+
+  background: #f8f1f5;
+  border: 1px solid #ead8e1;
+  border-radius: 12px;
+}
+
+.conflict-ml h4 {
+  color: #704052;
+  font-size: 15px;
+  margin: 0 0 10px;
+}
+
+.conflict-ml p {
+  color: #63555b;
+  font-size: 14px;
+  margin: 7px 0;
+}
+
+
+/* SHAP explanation container */
+
+.conflict-shap {
+  margin-top: 15px;
+  padding: 16px;
+
+  background: #fffafd;
+  border: 1px solid #ead8e1;
+  border-radius: 12px;
+}
+
+.conflict-shap h4 {
+  color: #704052;
+  font-size: 16px;
+  margin: 0 0 10px;
+}
+
+.shap-description {
+  color: #806f77;
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+
+/* Individual SHAP feature */
+
+.shap-feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.shap-feature {
+  padding: 12px 14px;
+
+  background: #faf3f7;
+  border: 1px solid #eee0e5;
+  border-radius: 9px;
+}
+
+.shap-feature strong {
+  display: inline-block;
+  color: #704052;
+  font-size: 13px;
+  margin-right: 8px;
+}
+
+.shap-feature .shap-value {
+  color: #8e4c64;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.shap-feature p {
+  color: #806f77;
+  font-size: 12px;
+  margin: 6px 0 0;
+  line-height: 1.5;
+}
+
+
+/* Empty ML/SHAP message */
+
+.conflict-ml .empty-message,
+.conflict-shap .empty-message {
+  color: #9a858d;
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+
+/* Mobile responsiveness */
+
+@media (max-width: 700px) {
+
+  .conflict-ml,
+  .conflict-shap {
+    padding: 12px;
+  }
+
+  .shap-feature {
+    padding: 10px;
+  }
+
+}

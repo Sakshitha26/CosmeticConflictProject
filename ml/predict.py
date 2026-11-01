@@ -6,10 +6,9 @@ import warnings
 
 import numpy as np
 import pandas as pd
-import shap
+import xgboost as xgb
 
 from xgboost import XGBClassifier
-
 
 warnings.filterwarnings("ignore")
 
@@ -27,7 +26,7 @@ BASE_DIR = os.path.dirname(
 DATA_PATH = os.path.join(
     BASE_DIR,
     "data",
-    "ingredient_pairs_augmented.xlsx"
+    "combined_ingredient_pairs2.xlsx"
 )
 
 MODEL_DIR = os.path.join(
@@ -69,22 +68,51 @@ RISK_CLASSES = [
 
 
 # ============================================================
-# 3. CLEAN INGREDIENT
+# 3. CIRS - COSMETIC INTERACTION RISK SCORE
+# ============================================================
+
+def calculate_cirs(
+    severity_score,
+    co_occurrence_score,
+    external_evidence_score,
+    interaction_score
+):
+
+    cirs = (
+        0.40 * severity_score
+        + 0.25 * co_occurrence_score
+        + 0.20 * external_evidence_score
+        + 0.15 * interaction_score
+    )
+
+    return max(
+        0,
+        min(100, cirs)
+    )
+
+
+def classify_cirs(cirs):
+
+    if cirs <= 30:
+        return "Safe"
+
+    elif cirs <= 60:
+        return "Medium Risk"
+
+    else:
+        return "High Risk"
+
+
+# ============================================================
+# 4. CLEAN INGREDIENT
 # ============================================================
 
 def clean_ingredient(value):
 
     value = str(value).lower().strip()
 
-    value = value.replace(
-        "-",
-        " "
-    )
-
-    value = value.replace(
-        "_",
-        " "
-    )
+    value = value.replace("-", " ")
+    value = value.replace("_", " ")
 
     value = re.sub(
         r"[^a-z0-9\s]",
@@ -102,13 +130,12 @@ def clean_ingredient(value):
 
 
 # ============================================================
-# 4. LOAD DATASET
+# 5. LOAD DATASET
 # ============================================================
 
 print("\n========================================")
 print("LOADING PREDICTION DATA")
 print("========================================")
-
 
 if not os.path.exists(DATA_PATH):
 
@@ -116,36 +143,40 @@ if not os.path.exists(DATA_PATH):
         f"Dataset not found:\n{DATA_PATH}"
     )
 
+df = pd.read_excel(DATA_PATH)
 
-df = pd.read_excel(
-    DATA_PATH
-)
+required_columns = [
+    "Ingredient_A",
+    "Ingredient_B",
+    "Severity"
+]
 
+missing_columns = [
+    column
+    for column in required_columns
+    if column not in df.columns
+]
 
-df["Ingredient_1"] = (
-    df["Ingredient_1"]
-    .apply(clean_ingredient)
-)
+if missing_columns:
 
+    raise ValueError(
+        f"Missing required columns: {missing_columns}\n"
+        f"Available columns: {df.columns.tolist()}"
+    )
 
-df["Ingredient_2"] = (
-    df["Ingredient_2"]
-    .apply(clean_ingredient)
-)
-
-
-# ------------------------------------------------------------
-# IMPORTANT:
-# ingredient_pairs_augmented.xlsx does not contain
-# Co_Occurrence_Count.
-#
-# The trained model expects this feature, so when the
-# prediction dataset does not contain it, use 0.
-# ------------------------------------------------------------
 
 if "Co_Occurrence_Count" not in df.columns:
 
-    df["Co_Occurrence_Count"] = 0
+    df["Co_Occurrence_Count"] = 0.0
+
+
+df["Ingredient_A"] = (
+    df["Ingredient_A"].apply(clean_ingredient)
+)
+
+df["Ingredient_B"] = (
+    df["Ingredient_B"].apply(clean_ingredient)
+)
 
 
 df["Co_Occurrence_Count"] = pd.to_numeric(
@@ -162,24 +193,18 @@ df["Severity"] = (
 )
 
 
-print(
-    "Prediction dataset loaded successfully!"
-)
-
-print(
-    "Rows:",
-    len(df)
-)
+print("Prediction dataset loaded successfully!")
+print("Rows:", len(df))
+print("Columns:", df.columns.tolist())
 
 
 # ============================================================
-# 5. LOAD MODEL
+# 6. LOAD XGBOOST MODEL
 # ============================================================
 
 print("\n========================================")
 print("LOADING XGBOOST MODEL")
 print("========================================")
-
 
 if not os.path.exists(MODEL_PATH):
 
@@ -187,64 +212,42 @@ if not os.path.exists(MODEL_PATH):
         f"XGBoost model not found:\n{MODEL_PATH}"
     )
 
-
 model = XGBClassifier(
     objective="multi:softprob",
     num_class=3
 )
 
+model.load_model(MODEL_PATH)
 
-model.load_model(
-    MODEL_PATH
-)
-
-
-print(
-    "XGBoost model loaded successfully!"
-)
+print("XGBoost model loaded successfully!")
 
 
 # ============================================================
-# 6. LOAD TF-IDF
+# 7. LOAD TF-IDF VECTORIZER
 # ============================================================
 
 print("\n========================================")
 print("LOADING TF-IDF VECTORIZER")
 print("========================================")
 
-
-if not os.path.exists(
-    VECTORIZER_PATH
-):
+if not os.path.exists(VECTORIZER_PATH):
 
     raise FileNotFoundError(
-        f"TF-IDF vectorizer not found:\n"
-        f"{VECTORIZER_PATH}"
+        f"TF-IDF vectorizer not found:\n{VECTORIZER_PATH}"
     )
 
+with open(VECTORIZER_PATH, "rb") as f:
 
-with open(
-    VECTORIZER_PATH,
-    "rb"
-) as f:
+    vectorizer = pickle.load(f)
 
-    vectorizer = pickle.load(
-        f
-    )
-
-
-print(
-    "TF-IDF vectorizer loaded successfully!"
-)
+print("TF-IDF vectorizer loaded successfully!")
 
 
 # ============================================================
-# 7. LOAD RISK CLASSES
+# 8. LOAD RISK CLASSES
 # ============================================================
 
-if os.path.exists(
-    RISK_CLASSES_PATH
-):
+if os.path.exists(RISK_CLASSES_PATH):
 
     loaded_classes = np.load(
         RISK_CLASSES_PATH,
@@ -260,15 +263,12 @@ if os.path.exists(
 
 
 # ============================================================
-# 8. LOAD FEATURE NAMES
+# 9. LOAD FEATURE NAMES
 # ============================================================
 
 feature_names = None
 
-
-if os.path.exists(
-    FEATURE_NAMES_PATH
-):
+if os.path.exists(FEATURE_NAMES_PATH):
 
     feature_names = np.load(
         FEATURE_NAMES_PATH,
@@ -277,41 +277,30 @@ if os.path.exists(
 
 
 # ============================================================
-# 9. LOAD EXTERNAL EVIDENCE
+# 10. LOAD EXTERNAL EVIDENCE
 # ============================================================
 
 print("\n========================================")
 print("LOADING EXTERNAL EVIDENCE")
 print("========================================")
 
-
 try:
 
-    from external_evidence import (
+    from .external_evidence import (
         load_external_evidence,
         get_external_co_occurrence
     )
 
-    external_df = (
-        load_external_evidence()
-    )
+    external_df = load_external_evidence()
 
     EXTERNAL_EVIDENCE_AVAILABLE = True
 
-    print(
-        "External evidence loaded successfully!"
-    )
+    print("External evidence loaded successfully!")
 
 except Exception as e:
 
-    print(
-        "External evidence could not be loaded."
-    )
-
-    print(
-        "Error:",
-        str(e)
-    )
+    print("External evidence could not be loaded.")
+    print("Error:", str(e))
 
     external_df = None
 
@@ -319,7 +308,7 @@ except Exception as e:
 
 
 # ============================================================
-# 10. CREATE MODEL TEXT
+# 11. CREATE MODEL TEXT
 # ============================================================
 
 def create_model_text(
@@ -327,81 +316,40 @@ def create_model_text(
     ingredient_2
 ):
 
-    ingredient_1 = clean_ingredient(
-        ingredient_1
-    )
+    ingredient_1 = clean_ingredient(ingredient_1)
+    ingredient_2 = clean_ingredient(ingredient_2)
 
-    ingredient_2 = clean_ingredient(
-        ingredient_2
-    )
-
-    token_1 = (
-        ingredient_1
-        .replace(
-            " ",
-            "_"
-        )
-    )
-
-    token_2 = (
-        ingredient_2
-        .replace(
-            " ",
-            "_"
-        )
-    )
+    token_1 = ingredient_1.replace(" ", "_")
+    token_2 = ingredient_2.replace(" ", "_")
 
     canonical_pair = "||".join(
-
         sorted([
             ingredient_1,
             ingredient_2
         ])
-
     )
 
     pair_token = (
         canonical_pair
-        .replace(
-            "||",
-            "__"
-        )
-        .replace(
-            " ",
-            "_"
-        )
+        .replace("||", "__")
+        .replace(" ", "_")
     )
 
     ingredient_text = (
-
         "ING1_"
         + token_1
-
         + " "
-
         + "ING2_"
         + token_2
-
     )
 
-    pair_text = (
+    pair_text = "PAIR_" + pair_token
 
-        "PAIR_"
-        + pair_token
-
-    )
-
-    return (
-
-        ingredient_text
-        + " "
-        + pair_text
-
-    )
+    return ingredient_text + " " + pair_text
 
 
 # ============================================================
-# 11. CREATE CANONICAL PAIR
+# 12. CREATE CANONICAL PAIR
 # ============================================================
 
 def create_canonical_pair(
@@ -409,26 +357,19 @@ def create_canonical_pair(
     ingredient_2
 ):
 
-    ingredient_1 = clean_ingredient(
-        ingredient_1
-    )
-
-    ingredient_2 = clean_ingredient(
-        ingredient_2
-    )
+    ingredient_1 = clean_ingredient(ingredient_1)
+    ingredient_2 = clean_ingredient(ingredient_2)
 
     return "||".join(
-
         sorted([
             ingredient_1,
             ingredient_2
         ])
-
     )
 
 
 # ============================================================
-# 12. FIND PAIR IN AUGMENTED DATASET
+# 13. FIND PAIR IN DATASET
 # ============================================================
 
 def find_pair(
@@ -436,133 +377,77 @@ def find_pair(
     ingredient_2
 ):
 
-    ingredient_1 = clean_ingredient(
-        ingredient_1
-    )
-
-    ingredient_2 = clean_ingredient(
-        ingredient_2
-    )
-
-    # --------------------------------------------------------
-    # Direct orientation
-    # --------------------------------------------------------
+    ingredient_1 = clean_ingredient(ingredient_1)
+    ingredient_2 = clean_ingredient(ingredient_2)
 
     direct = df[
-        (
-            df["Ingredient_1"]
-            == ingredient_1
-        )
+        (df["Ingredient_A"] == ingredient_1)
         &
-        (
-            df["Ingredient_2"]
-            == ingredient_2
-        )
+        (df["Ingredient_B"] == ingredient_2)
     ]
-
-
-    # --------------------------------------------------------
-    # Reverse orientation
-    # --------------------------------------------------------
 
     reverse = df[
-        (
-            df["Ingredient_1"]
-            == ingredient_2
-        )
+        (df["Ingredient_A"] == ingredient_2)
         &
-        (
-            df["Ingredient_2"]
-            == ingredient_1
-        )
+        (df["Ingredient_B"] == ingredient_1)
     ]
-
 
     if len(direct) > 0:
 
         row = direct.iloc[0]
 
-        return {
-
-            "found": True,
-
-            "co_occurrence": float(
-                row[
-                    "Co_Occurrence_Count"
-                ]
-            ),
-
-            "dataset_risk":
-                str(
-                    row["Severity"]
-                ).title(),
-
-            "severity_note":
-                (
-                    str(
-                        row["Severity_Note"]
-                    )
-                    if "Severity_Note" in row
-                    and not pd.isna(
-                        row["Severity_Note"]
-                    )
-                    else ""
-                )
-
-        }
-
-
-    if len(reverse) > 0:
+    elif len(reverse) > 0:
 
         row = reverse.iloc[0]
 
+    else:
+
         return {
-
-            "found": True,
-
-            "co_occurrence": float(
-                row[
-                    "Co_Occurrence_Count"
-                ]
-            ),
-
-            "dataset_risk":
-                str(
-                    row["Severity"]
-                ).title(),
-
-            "severity_note":
-                (
-                    str(
-                        row["Severity_Note"]
-                    )
-                    if "Severity_Note" in row
-                    and not pd.isna(
-                        row["Severity_Note"]
-                    )
-                    else ""
-                )
-
+            "found": False,
+            "co_occurrence": 0.0,
+            "dataset_risk": None,
+            "severity_note": ""
         }
 
+    severity_note = ""
+
+    explanation_column = None
+
+    if "Severity_Explanation" in df.columns:
+
+        explanation_column = "Severity_Explanation"
+
+    elif "Severity Explanation" in df.columns:
+
+        explanation_column = "Severity Explanation"
+
+    if explanation_column is not None:
+
+        if pd.notna(row[explanation_column]):
+
+            severity_note = str(
+                row[explanation_column]
+            )
 
     return {
 
-        "found": False,
+        "found": True,
 
-        "co_occurrence": 0.0,
+        "co_occurrence": float(
+            row["Co_Occurrence_Count"]
+        ),
 
-        "dataset_risk":
-            None,
+        "dataset_risk": str(
+            row["Severity"]
+        ).title(),
 
-        "severity_note":
-            ""
+        "severity_note": severity_note
 
     }
 
 
 # ============================================================
-# 13. GET EXTERNAL CO-OCCURRENCE
+# 14. GET EXTERNAL CO-OCCURRENCE
 # ============================================================
 
 def get_external_value(
@@ -574,32 +459,19 @@ def get_external_value(
 
         return 0.0
 
-
     try:
 
-        value = (
-            get_external_co_occurrence(
-
-                clean_ingredient(
-                    ingredient_1
-                ),
-
-                clean_ingredient(
-                    ingredient_2
-                ),
-
-                external_df
-
-            )
+        value = get_external_co_occurrence(
+            clean_ingredient(ingredient_1),
+            clean_ingredient(ingredient_2),
+            external_df
         )
 
         if value is None:
 
             return 0.0
 
-        return float(
-            value
-        )
+        return float(value)
 
     except Exception as e:
 
@@ -612,178 +484,201 @@ def get_external_value(
 
 
 # ============================================================
-# 14. BUILD FINAL FEATURE VECTOR
+# 15. BUILD FINAL FEATURE VECTOR
 # ============================================================
 
 def build_features(
     ingredient_1,
     ingredient_2,
-    co_occurrence
+    co_occurrence=0
 ):
 
-    # --------------------------------------------------------
-    # Clean input
-    # --------------------------------------------------------
-
-    ingredient_1 = clean_ingredient(
-        ingredient_1
-    )
-
-    ingredient_2 = clean_ingredient(
-        ingredient_2
-    )
-
-
-    # --------------------------------------------------------
-    # Model text
-    # --------------------------------------------------------
+    ingredient_1 = clean_ingredient(ingredient_1)
+    ingredient_2 = clean_ingredient(ingredient_2)
 
     model_text = create_model_text(
-
         ingredient_1,
-
         ingredient_2
-
     )
 
+    # TF-IDF features
 
-    # --------------------------------------------------------
-    # TF-IDF
-    # --------------------------------------------------------
+    X_text = vectorizer.transform(
+        [model_text]
+    ).toarray()
 
-    X_text = (
-
-        vectorizer
-        .transform(
-            [model_text]
-        )
-        .toarray()
-
-    )
-
-
-    # --------------------------------------------------------
-    # Internal co-occurrence
-    #
-    # IMPORTANT:
-    # Training uses log1p(Co_Occurrence_Count)
-    # --------------------------------------------------------
-
-    co_occurrence = float(
-        co_occurrence
-    )
-
-
-    co_occurrence_log = np.log1p(
-        co_occurrence
-    )
-
-
-    # --------------------------------------------------------
     # External evidence
-    # --------------------------------------------------------
 
-    external_co_occurrence = (
-        get_external_value(
-
-            ingredient_1,
-
-            ingredient_2
-
-        )
+    external_co_occurrence = get_external_value(
+        ingredient_1,
+        ingredient_2
     )
 
-
-    external_co_occurrence_log = (
-        np.log1p(
-            external_co_occurrence
-        )
+    external_co_occurrence = max(
+        0.0,
+        float(external_co_occurrence or 0.0)
     )
 
-
-    # --------------------------------------------------------
-    # External evidence indicator
-    # --------------------------------------------------------
+    external_co_occurrence_log = np.log1p(
+        external_co_occurrence
+    )
 
     external_evidence_indicator = (
-
-        1.0
-
-        if external_co_occurrence > 0
-
-        else 0.0
-
+        1.0 if external_co_occurrence > 0 else 0.0
     )
 
-
-    # --------------------------------------------------------
-    # Final feature vector
-    # --------------------------------------------------------
+    X_external = np.array(
+        [[
+            external_co_occurrence_log,
+            external_evidence_indicator
+        ]],
+        dtype=float
+    )
 
     X = np.hstack([
-
         X_text,
-
-        np.array([
-            [co_occurrence_log]
-        ]),
-
-        np.array([
-            [external_co_occurrence_log]
-        ]),
-
-        np.array([
-            [external_evidence_indicator]
-        ])
-
+        X_external
     ])
 
-
-    return (
-
-        X,
-
-        external_co_occurrence
-
-    )
+    return X, external_co_occurrence
 
 
 # ============================================================
-# 15. VERIFY FEATURE COUNT
+# 16. VERIFY FEATURE COUNT
 # ============================================================
 
 def verify_feature_count(X):
 
     expected_features = int(
-        model.get_booster()
-        .num_features()
+        model.get_booster().num_features()
     )
 
     actual_features = int(
         X.shape[1]
     )
 
-
     if actual_features != expected_features:
 
         raise ValueError(
-
             "\nFEATURE SHAPE MISMATCH\n"
-
-            f"Model expects: "
-            f"{expected_features}\n"
-
-            f"Predictor created: "
-            f"{actual_features}\n\n"
-
-            "The training and prediction "
-            "feature pipelines do not match."
-
+            f"Model expects: {expected_features}\n"
+            f"Predictor created: {actual_features}\n"
+            "The training and prediction feature pipelines do not match."
         )
 
 
 # ============================================================
-# 16. PREDICT RISK
+# 17. CALCULATE CIRS COMPONENTS
+# ============================================================
+
+def calculate_cirs_components(
+    dataset_risk,
+    co_occurrence,
+    external_co_occurrence
+):
+
+    severity_map = {
+        "Safe": 0,
+        "Low": 20,
+        "Medium": 60,
+        "High": 90
+    }
+
+    dataset_risk_clean = str(
+        dataset_risk
+    ).strip()
+
+    severity_score = severity_map.get(
+        dataset_risk_clean,
+        0
+    )
+
+    co_occurrence_log = np.log1p(
+        max(0, float(co_occurrence))
+    )
+
+    co_occurrence_score = min(
+        100,
+        co_occurrence_log * 20
+    )
+
+    external_evidence_score = (
+        100 if external_co_occurrence > 0 else 0
+    )
+
+    if severity_score >= 90:
+
+        interaction_score = 90
+
+    elif severity_score >= 60:
+
+        interaction_score = 60
+
+    elif severity_score >= 20:
+
+        interaction_score = 30
+
+    else:
+
+        interaction_score = 0
+
+    return (
+        severity_score,
+        co_occurrence_score,
+        external_evidence_score,
+        interaction_score
+    )
+
+
+# ============================================================
+# 18. CALCULATE FINAL CIRS
+# ============================================================
+
+def calculate_risk_score(
+    dataset_risk,
+    co_occurrence,
+    external_co_occurrence
+):
+
+    (
+        severity_score,
+        co_occurrence_score,
+        external_evidence_score,
+        interaction_score
+    ) = calculate_cirs_components(
+        dataset_risk,
+        co_occurrence,
+        external_co_occurrence
+    )
+
+    cirs = calculate_cirs(
+        severity_score,
+        co_occurrence_score,
+        external_evidence_score,
+        interaction_score
+    )
+
+    cirs_risk = classify_cirs(cirs)
+
+    return {
+
+        "severity_score": severity_score,
+
+        "co_occurrence_score": co_occurrence_score,
+
+        "external_evidence_score": external_evidence_score,
+
+        "interaction_score": interaction_score,
+
+        "cirs": cirs,
+
+        "cirs_risk": cirs_risk
+
+    }
+
+
+# ============================================================
+# 19. PREDICT RISK
 # ============================================================
 
 def predict_risk(
@@ -792,648 +687,438 @@ def predict_risk(
     co_occurrence=0
 ):
 
-    # --------------------------------------------------------
-    # Build features
-    # --------------------------------------------------------
-
-    X, external_co_occurrence = (
-        build_features(
-
-            ingredient_1,
-
-            ingredient_2,
-
-            co_occurrence
-
-        )
+    X, external_co_occurrence = build_features(
+        ingredient_1,
+        ingredient_2,
+        co_occurrence
     )
 
+    verify_feature_count(X)
 
-    # --------------------------------------------------------
-    # Verify exact model dimensions
-    # --------------------------------------------------------
-
-    verify_feature_count(
-        X
-    )
-
-
-    # --------------------------------------------------------
-    # Prediction probabilities
-    # --------------------------------------------------------
-
-    probabilities_array = (
-
-        model
-        .predict_proba(
-            X
-        )[0]
-
-    )
-
-
-    # --------------------------------------------------------
-    # Predicted class
-    # --------------------------------------------------------
+    probabilities_array = model.predict_proba(X)[0]
 
     predicted_class = int(
-
-        np.argmax(
-            probabilities_array
-        )
-
+        np.argmax(probabilities_array)
     )
 
-
-    # --------------------------------------------------------
-    # Safety check
-    # --------------------------------------------------------
-
-    if predicted_class < 0:
-
-        predicted_class = 0
-
-
-    if predicted_class >= len(
-        RISK_CLASSES
-    ):
-
-        predicted_class = (
+    predicted_class = max(
+        0,
+        min(
+            predicted_class,
             len(RISK_CLASSES) - 1
         )
-
-
-    predicted_risk = (
-        RISK_CLASSES[
-            predicted_class
-        ]
     )
 
-
-    # --------------------------------------------------------
-    # Probability dictionary
-    # --------------------------------------------------------
+    predicted_risk = RISK_CLASSES[predicted_class]
 
     probabilities = {
-
-        "Safe":
-            float(
-                probabilities_array[0]
-            ),
-
-        "Medium Risk":
-            float(
-                probabilities_array[1]
-            ),
-
-        "High Risk":
-            float(
-                probabilities_array[2]
-            )
-
+        RISK_CLASSES[i]: float(probabilities_array[i])
+        for i in range(len(RISK_CLASSES))
     }
 
+    print("\nExternal co-occurrence:", external_co_occurrence)
+    print("Feature vector shape:", X.shape)
+    print("Predicted class:", predicted_class)
+    print("Predicted risk:", predicted_risk)
 
-    print(
-        "\nExternal co-occurrence:",
+    return (
+        predicted_risk,
+        probabilities,
+        X,
+        predicted_class,
         external_co_occurrence
     )
 
 
-    print(
-        "Feature vector shape:",
-        X.shape
-    )
-
-
-    print(
-        "Predicted class:",
-        predicted_class
-    )
-
-
-    print(
-        "Predicted risk:",
-        predicted_risk
-    )
-
-
-    return (
-
-        predicted_risk,
-
-        probabilities,
-
-        X,
-
-        predicted_class
-
-    )
-
-
 # ============================================================
-# 17. SHAP EXPLANATION
+# 20. SHAP USING XGBOOST BUILT-IN TREESHAP
 # ============================================================
 
-def explain_prediction(
-    X
-):
+def explain_prediction(X):
 
     try:
 
-        # ----------------------------------------------------
-        # Small background for faster permutation SHAP
-        # ----------------------------------------------------
-
-        background = np.zeros(
-            (
-                1,
-                X.shape[1]
-            ),
-            dtype=float
+        print(
+            "\nGenerating SHAP contributions using XGBoost..."
         )
 
+        booster = model.get_booster()
 
-        # ----------------------------------------------------
-        # SHAP permutation explainer
-        # ----------------------------------------------------
+        dmatrix = xgb.DMatrix(X)
 
-        explainer = shap.Explainer(
-
-            model.predict_proba,
-
-            background,
-
-            algorithm="permutation"
-
+        explanation = booster.predict(
+            dmatrix,
+            pred_contribs=True,
+            strict_shape=True
         )
 
+        print("SHAP calculation successful!")
 
-        explanation = explainer(
-            X
+        print(
+            "SHAP output shape:",
+            explanation.shape
         )
-
 
         return explanation
 
-
     except Exception as e:
 
-        print(
-            "\nSHAP explanation failed:"
-        )
+        print("\nSHAP explanation failed:")
 
-        print(
-            type(e).__name__
-        )
-
-        print(
-            str(e)
-        )
+        print(type(e).__name__, str(e))
 
         return None
 
 
 # ============================================================
-# 18. DISPLAY SHAP
+# 21. CONVERT SHAP VALUES INTO FRONTEND FORMAT
 # ============================================================
 
-def display_shap(
+def get_shap_explanations(
     explanation,
-    predicted_class
+    predicted_class,
+    X=None,
+    top_n=5
 ):
 
     if explanation is None:
 
-        print(
-            "\nSHAP explanation unavailable."
-        )
-
-        return
-
+        return []
 
     try:
 
-        values = (
-            explanation.values
+        values = np.asarray(explanation)
+
+        print("\nProcessing SHAP contributions...")
+
+        print(
+            "SHAP array shape:",
+            values.shape
         )
 
+        if values.ndim != 3:
 
-        if values.ndim == 3:
+            print("Unexpected SHAP dimensions.")
 
-            shap_values = values[
-                0,
-                :,
-                predicted_class
-            ]
+            return []
 
-        elif values.ndim == 2:
+        if values.shape[1] != len(RISK_CLASSES):
 
-            shap_values = values[
-                0
-            ]
+            print("Unexpected SHAP class dimension.")
 
-        else:
+            return []
 
-            print(
-                "Unexpected SHAP shape:",
-                values.shape
-            )
-
-            return
-
-
-        # ----------------------------------------------------
-        # Feature names
-        # ----------------------------------------------------
+        shap_values = values[
+            0,
+            predicted_class,
+            :-1
+        ]
 
         if (
             feature_names is not None
-            and len(feature_names)
-            == len(shap_values)
+            and len(feature_names) == len(shap_values)
         ):
 
             names = [
-                str(x)
-                for x in feature_names
+                str(name)
+                for name in feature_names
             ]
 
         else:
 
             names = [
-
                 f"Feature_{i}"
-
-                for i in range(
-                    len(shap_values)
-                )
-
+                for i in range(len(shap_values))
             ]
 
+        # Only select features that are active in this input.
 
-        # ----------------------------------------------------
-        # Get strongest SHAP features
-        # ----------------------------------------------------
+        if X is not None:
 
-        top_indices = np.argsort(
+            input_values = np.asarray(X).reshape(-1)
 
-            np.abs(
-                shap_values
+            active_indices = np.flatnonzero(
+                np.abs(input_values) > 1e-12
             )
 
-        )[::-1][:10]
-
-
-        print(
-            "\n========================================"
-        )
-
-        print(
-            "SHAP EXPLANATION"
-        )
-
-        print(
-            "========================================"
-        )
-
-
-        print(
-            "Predicted class:",
-            RISK_CLASSES[
-                predicted_class
+            active_indices = [
+                index
+                for index in active_indices
+                if index < len(shap_values)
             ]
-        )
 
+        else:
 
-        print(
-            "\nTop contributing features:"
-        )
+            active_indices = range(
+                len(shap_values)
+            )
 
+        results = []
 
-        shown = 0
-
-
-        for index in top_indices:
+        for index in active_indices:
 
             value = float(
                 shap_values[index]
             )
 
-
-            # Skip negligible values
             if abs(value) < 1e-8:
 
                 continue
 
+            feature = names[index]
 
-            feature = names[
-                index
-            ]
-
-
-            if value > 0:
-
-                direction = (
-                    "increases predicted risk"
-                )
-
-            else:
-
-                direction = (
-                    "decreases predicted risk"
-                )
-
-
-            print(
-
-                f"{feature}: "
-                f"{value:.6f} "
-                f"({direction})"
-
+            readable_name = (
+                feature
+                .replace("ING1_", "Ingredient 1: ")
+                .replace("ING2_", "Ingredient 2: ")
+                .replace("PAIR_", "Ingredient pair: ")
+                .replace("_", " ")
             )
 
-
-            shown += 1
-
-
-            if shown >= 10:
-
-                break
-
-
-        if shown == 0:
-
-            print(
-                "No significant SHAP contributions found."
+            direction = (
+                "Supports the predicted class"
+                if value > 0
+                else "Opposes the predicted class"
             )
 
+            results.append({
+
+                "feature": readable_name,
+
+                "value": round(value, 6),
+
+                "direction": direction
+
+            })
+
+        results.sort(
+            key=lambda item: abs(item["value"]),
+            reverse=True
+        )
+
+        return results[:top_n]
 
     except Exception as e:
 
-        print(
-            "\nUnable to display SHAP:"
-        )
+        print("\nSHAP conversion failed:")
+
+        print(type(e).__name__, str(e))
+
+        return []
+
+
+# ============================================================
+# 22. DISPLAY SHAP
+# ============================================================
+
+def display_shap(
+    shap_results,
+    predicted_class
+):
+
+    print("\n========================================")
+    print("SHAP EXPLANATION")
+    print("========================================")
+
+    print(
+        "Predicted class:",
+        RISK_CLASSES[predicted_class]
+    )
+
+    if not shap_results:
 
         print(
-            type(e).__name__
+            "No significant SHAP contributions found."
         )
 
+        return
+
+    for item in shap_results:
+
         print(
-            str(e)
+            f"{item['feature']}: "
+            f"{item['value']:.6f} "
+            f"({item['direction']})"
         )
 
 
 # ============================================================
-# 19. MAIN
+# 23. DISPLAY CIRS
+# ============================================================
+
+def display_cirs(cirs_result):
+
+    print("\n========================================")
+    print("COSMETIC INTERACTION RISK SCORE")
+    print("========================================")
+
+    print(
+        f"Severity Score: "
+        f"{cirs_result['severity_score']:.2f}/100"
+    )
+
+    print(
+        f"Co-occurrence Score: "
+        f"{cirs_result['co_occurrence_score']:.2f}/100"
+    )
+
+    print(
+        f"External Evidence Score: "
+        f"{cirs_result['external_evidence_score']:.2f}/100"
+    )
+
+    print(
+        f"Interaction Score: "
+        f"{cirs_result['interaction_score']:.2f}/100"
+    )
+
+    print(
+        f"\nCIRS Score: "
+        f"{cirs_result['cirs']:.2f}/100"
+    )
+
+    print(
+        "CIRS Risk:",
+        cirs_result["cirs_risk"]
+    )
+
+
+# ============================================================
+# 24. MAIN
 # ============================================================
 
 if __name__ == "__main__":
 
-    print(
-        "\n========================================"
-    )
-
-    print(
-        "COSMETIC CONFLICT RISK PREDICTOR"
-    )
-
-    print(
-        "========================================"
-    )
-
-
-    # --------------------------------------------------------
-    # Input
-    # --------------------------------------------------------
+    print("\n========================================")
+    print("COSMETIC CONFLICT RISK PREDICTOR")
+    print("========================================")
 
     ingredient_1 = input(
         "\nEnter first ingredient: "
     )
 
-
     ingredient_2 = input(
         "Enter second ingredient: "
     )
 
-
-    # --------------------------------------------------------
-    # Search dataset
-    # --------------------------------------------------------
+    # Dataset lookup
 
     pair_info = find_pair(
-
         ingredient_1,
-
         ingredient_2
-
     )
 
-
-    # --------------------------------------------------------
-    # Dataset information
-    # --------------------------------------------------------
-
-    print(
-        "\n========================================"
-    )
-
-    print(
-        "DATASET INFORMATION"
-    )
-
-    print(
-        "========================================"
-    )
-
+    print("\n========================================")
+    print("DATASET INFORMATION")
+    print("========================================")
 
     if pair_info["found"]:
 
-        print(
-            "Pair found in dataset: YES"
-        )
-
+        print("Pair found in dataset: YES")
 
         print(
             "Co-occurrence count:",
-            pair_info[
-                "co_occurrence"
-            ]
+            pair_info["co_occurrence"]
         )
-
 
         print(
             "Dataset risk:",
-            pair_info[
-                "dataset_risk"
-            ]
+            pair_info["dataset_risk"]
         )
 
-
-        if pair_info[
-            "severity_note"
-        ]:
+        if pair_info["severity_note"]:
 
             print(
-                "Severity note:",
-                pair_info[
-                    "severity_note"
-                ]
+                "Severity explanation:",
+                pair_info["severity_note"]
             )
-
 
     else:
 
-        print(
-            "Pair found in dataset: NO"
-        )
+        print("Pair found in dataset: NO")
+        print("This is an unseen ingredient pair.")
+        print("Co-occurrence count: 0")
 
+    # External evidence
 
-        print(
-            "This is an unseen ingredient pair."
-        )
-
-
-        print(
-            "Co-occurrence count: 0"
-        )
-
-
-    # --------------------------------------------------------
-    # External evidence preview
-    # --------------------------------------------------------
-
-    external_value = (
-        get_external_value(
-
-            ingredient_1,
-
-            ingredient_2
-
-        )
+    external_value = get_external_value(
+        ingredient_1,
+        ingredient_2
     )
-
 
     print(
         "External co-occurrence:",
         external_value
     )
 
-
-    # --------------------------------------------------------
-    # Prediction
-    # --------------------------------------------------------
+    # XGBoost prediction
 
     (
         predicted_risk,
-
         probabilities,
-
         X,
-
-        predicted_class
-
+        predicted_class,
+        external_co_occurrence
     ) = predict_risk(
-
         ingredient_1,
-
         ingredient_2,
-
-        pair_info[
-            "co_occurrence"
-        ]
-
+        pair_info["co_occurrence"]
     )
 
+    # CIRS
 
-    # --------------------------------------------------------
+    cirs_result = calculate_risk_score(
+        pair_info["dataset_risk"],
+        pair_info["co_occurrence"],
+        external_co_occurrence
+    )
+
     # Prediction result
-    # --------------------------------------------------------
 
-    print(
-        "\n========================================"
-    )
+    print("\n========================================")
+    print("PREDICTION RESULT")
+    print("========================================")
 
-    print(
-        "PREDICTION RESULT"
-    )
+    print("Ingredient 1:", ingredient_1)
+    print("Ingredient 2:", ingredient_2)
+    print("Predicted Risk:", predicted_risk)
 
-    print(
-        "========================================"
-    )
+    print("\nRisk Probabilities:")
 
-
-    print(
-        "Ingredient 1:",
-        ingredient_1
-    )
-
-
-    print(
-        "Ingredient 2:",
-        ingredient_2
-    )
-
-
-    print(
-        "\nPredicted Risk:",
-        predicted_risk
-    )
-
-
-    # --------------------------------------------------------
-    # Probabilities
-    # --------------------------------------------------------
-
-    print(
-        "\nRisk Probabilities:"
-    )
-
-
-    for risk, probability in (
-        probabilities.items()
-    ):
+    for risk, probability in probabilities.items():
 
         print(
-
-            f"{risk}: "
-            f"{probability * 100:.2f}%"
-
+            f"{risk}: {probability * 100:.2f}%"
         )
 
+    # Display CIRS
 
-    # --------------------------------------------------------
+    display_cirs(cirs_result)
+
     # SHAP
-    # --------------------------------------------------------
 
-    explanation = (
-        explain_prediction(
-            X
-        )
+    print("\nGenerating SHAP explanations...")
+
+    explanation = explain_prediction(X)
+
+    shap_explanation = get_shap_explanations(
+        explanation,
+        predicted_class,
+        X=X,
+        top_n=5
     )
-
 
     display_shap(
-
-        explanation,
-
+        shap_explanation,
         predicted_class
-
     )
 
+    print("\n========================================")
+    print("SHAP DATA FOR FRONTEND")
+    print("========================================")
 
-    # --------------------------------------------------------
-    # Final
-    # --------------------------------------------------------
+    print(shap_explanation)
 
-    print(
-        "\n========================================"
-    )
-
-    print(
-        "Prediction completed successfully!"
-    )
-
-    print(
-        "========================================"
-    )
-
+    print("\n========================================")
+    print("Prediction completed successfully!")
+    print("========================================")
